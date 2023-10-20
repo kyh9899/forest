@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hm.forest.board.model.mapper.BoardMapper">
+
+	<sql id="boardListSql">
+	SELECT ROWNUM AS BOARD_ROWNUM,
+			   B.NO, 
+			   B.TYPE, 
+			   B.CATEGORY,
+			   B.WRITER_NO, 
+			   M.ID,
+			   B.TITLE, 
+			   B.CONTENT, 
+			   B.CONTENT2, 
+			   B.ORIGINAL_FILENAME, 
+			   B.RENAMED_FILENAME, 
+			   B.READCOUNT, 
+			   B.STATUS, 
+			   B.CREATE_DATE, 
+			   B.MODIFY_DATE
+		FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		WHERE  B.STATUS = 'Y' 
+	</sql>
+
+	<resultMap id="boardResultMap" type="Board">
+		<id property="no" column="NO"/>
+		<result property="rowNum" column="BOARD_ROWNUM"/>
+		<result property="type" column="TYPE"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="title" column="TITLE"/>
+		<result property="writerNo" column="WRITER_NO"/>
+		<result property="writerId" column="ID"/>
+		<result property="originalFilename" column="ORIGINAL_FILENAME"/>
+		<result property="renamedFilename" column="RENAMED_FILENAME"/>
+		<result property="readCount" column="READCOUNT"/>
+		<result property="likeCount" column="LIKECOUNT"/>
+		<result property="reportCount" column="REPORTCOUNT"/>
+		<result property="reportDetail" column="REPORTDETAIL"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="modifyDate" column="MODIFY_DATE"/>
+	</resultMap>
+	
+	<resultMap id="boardDetailResultMap" type="Board" extends="boardResultMap">
+		<result property="content" column="CONTENT"/>
+		<result property="modifyDate" column="MODIFY_DATE"/>
+		<!-- columnPrefix R_ 붙은 컬럼들은 resultMap으로 매핑작업하고, list에 담아서 Board객체의 replies에 담아서 처리한다. -->
+		<collection property="replies" ofType="Reply" javaType="arraylist" columnPrefix="R_" resultMap="replyResultMap" column="NO"/>
+	</resultMap>
+	
+	<resultMap id="replyResultMap" type="Reply">
+		<id property="no" column="NO"/>
+		<result property="boardNo" column="BOARD_NO"/>
+		<result property="writerNo" column="WRITER_NO"/>
+		<result property="writerId" column="ID"/>
+		<result property="content" column="CONTENT"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<result property="modifyDate" column="MODIFY_DATE"/>
+		<result property="reportCount" column="REPORTCOUNT"/>
+		<result property="reportDetail" column="REPORTDETAIL"/>
+	</resultMap>
+	
+	<!-- 게시판 타입별 게시글 전체 개수 -->
+	<select id="selectBoardCountByType" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD 
+		WHERE  STATUS = 'Y' AND TYPE = #{type}
+	</select>
+	
+	<!-- 게시판 타입별 게시글 전체 목록 조회 -->
+	<select id="selectBoardListsByType" parameterType="string" resultMap="boardResultMap">
+		<include refid="boardListSql" /> 
+		AND B.TYPE = #{type}
+		ORDER BY B.NO DESC
+	</select>
+	
+	<!-- [검색값 o] 게시판 타입별 게시글 전체 개수 -->
+	<select id="selectBoardCountBySearchValue" parameterType="map" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		WHERE B.STATUS = 'Y' AND B.TYPE = #{type} 
+		<if test="searchType != null">
+			<choose>
+				<when test='searchType.equals("writer")'>
+				AND M.ID LIKE '%' || #{keyWord} || '%'
+				</when>
+				<when test='searchType.equals("title")'>
+				AND B.TITLE LIKE '%' || #{keyWord} || '%'
+				</when>
+				<when test='searchType.equals("content")'>
+				AND B.CONTENT LIKE '%' || #{keyWord} || '%'
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- [검색값 o] 게시판 타입별 게시글 전체 목록 조회 -->
+	<select id="selectBoardListsBySearchValue" parameterType="map" resultMap="boardResultMap">
+		<include refid="boardListSql" /> 
+		AND B.TYPE = #{type}
+		<if test="searchType != null">
+			<choose>
+				<when test='searchType.equals("writer")'>
+				AND M.ID LIKE '%' || #{keyWord} || '%'
+				</when>
+				<when test='searchType.equals("title")'>
+				AND B.TITLE LIKE '%' || #{keyWord} || '%'
+				</when>
+				<when test='searchType.equals("content")'>
+				AND B.CONTENT LIKE '%' || #{keyWord} || '%'
+				</when>
+			</choose>
+		</if>
+		ORDER BY B.NO DESC
+	</select>
+	
+	
+	<!-- 특정 게시글 조회 -->
+	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
+		SELECT B.NO,
+			   B.TYPE,
+			   B.CATEGORY,
+			   B.WRITER_NO,
+			   M.ID,
+			   B.TITLE,
+			   B.CONTENT,
+			   B.CONTENT2,
+			   B.ORIGINAL_FILENAME,
+			   B.RENAMED_FILENAME,
+			   B.READCOUNT,
+			   B.STATUS,
+			   B.CREATE_DATE,
+			   B.MODIFY_DATE,
+			   R.NO AS "R_NO",
+			   R.STATUS AS "R_STATUS",
+			   R.BOARD_NO AS "R_BOARD_NO",
+			   R.WRITER_NO AS "R_WRITER_NO",
+			   R.CONTENT AS "R_CONTENT",
+			   M2.ID AS "R_ID",
+			   R.CREATE_DATE AS "R_CREATE_DATE",
+			   R.MODIFY_DATE AS "R_MODIFY_DATE"
+		FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		LEFT OUTER JOIN REPLY R ON (B.NO = R.BOARD_NO AND R.STATUS = 'Y')
+		LEFT OUTER JOIN MEMBER M2 ON (R.WRITER_NO = M2.NO)
+		WHERE  B.STATUS = 'Y' AND B.NO = #{no}
+		ORDER BY R_NO
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertBoard" parameterType="Board">
+	<selectKey resultType="_int" keyProperty="no" order="BEFORE">
+		SELECT SEQ_BOARD_NO.NEXTVAL FROM DUAL
+	</selectKey>
+		INSERT INTO BOARD(
+			NO,
+			TYPE,
+		    CATEGORY,
+		    WRITER_NO,
+		    TITLE,
+		    CONTENT,
+		    CONTENT2,
+		    ORIGINAL_FILENAME,
+		    RENAMED_FILENAME
+		) VALUES(
+			#{no},
+			#{type},
+			#{category},
+			#{writerNo},
+			#{title},
+			#{content},
+			#{content2},
+			#{originalFilename},
+			#{renamedFilename}
+		)
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="Board">
+		UPDATE BOARD 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="title != null">
+				TITLE=#{title},
+			</if>
+			<if test="content != null">
+				CONTENT=#{content},
+			</if>
+			<if test="originalFilename != null">
+				ORIGINAL_FILENAME=#{originalFilename},			
+			</if>
+			<if test="renamedFilename != null">			
+				RENAMED_FILENAME=#{renamedFilename},
+			</if>
+			MODIFY_DATE=SYSDATE 
+		</trim>			
+		WHERE NO=#{no}
+	</update>
+	
+	<!-- 게시글 삭제(상태값 변경) -->
+	<update id="updateStatus" parameterType="map">
+		UPDATE BOARD
+		SET STATUS = #{status}
+		WHERE NO = #{no}
+	</update>
+	
+	<!-- 게시글 조회수 업데이트 -->
+	<update id="updateReadCount" parameterType="_int">
+		UPDATE BOARD
+		SET READCOUNT = READCOUNT + 1
+		WHERE NO = #{no}
+	</update>
+	
+	<insert id="insertReply" parameterType="Reply">
+	<selectKey resultType="_int" keyProperty="no" order="BEFORE">
+		SELECT SEQ_REPLY_NO.NEXTVAL FROM DUAL
+	</selectKey>
+	    INSERT INTO REPLY(
+	    	NO,
+	    	BOARD_NO,
+	    	WRITER_NO,
+	    	CONTENT
+	    ) VALUES(
+	    	#{no},
+	    	#{boardNo},
+			#{writerNo},
+			#{content}
+		)
+	</insert>
+	
+	<!-- 댓글 리스트 조회 -->
+	<select id="selectRepliesByBoardNo" parameterType="_int" resultMap="replyResultMap">
+		SELECT R.NO,
+               R.BOARD_NO,
+               R.WRITER_NO,
+               M.ID,
+               R.CONTENT,
+               R.STATUS,
+               R.CREATE_DATE,
+               R.MODIFY_DATE
+		FROM REPLY R
+		INNER JOIN MEMBER M ON (R.WRITER_NO = M.NO)
+		WHERE R.STATUS = 'Y' AND R.BOARD_NO = #{boardNo}
+	</select>
+	
+	<!-- 게시글별 댓글 수 -->
+	<select id="selectReplyCountByBoardNo" parameterType="_int" resultType="_int">
+		SELECT COUNT(*)
+		FROM REPLY 
+		WHERE STATUS = 'Y' AND BOARD_NO = #{boardNo}
+	</select>
+	
+	<!-- 특정 댓글 조회 -->
+	<select id="selectReplyByNo" parameterType="_int" resultMap="replyResultMap">
+	  SELECT R.NO,
+             R.BOARD_NO,
+             R.WRITER_NO,
+             M.ID,
+             R.CONTENT,
+             R.STATUS,
+             R.CREATE_DATE,
+             R.MODIFY_DATE
+      FROM REPLY R
+	  INNER JOIN MEMBER M ON (R.WRITER_NO = M.NO)
+	  WHERE R.STATUS = 'Y' AND R.NO = #{no}
+	</select>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="Reply">
+		UPDATE REPLY 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="content != null">
+				CONTENT=#{content},
+			</if>
+			MODIFY_DATE=SYSDATE 
+		</trim>			
+		WHERE NO=#{no}
+	</update>
+	
+	<!-- 댓글 삭제(상태값 변경) -->
+	<update id="updateReplyStatus" parameterType="map">
+		UPDATE REPLY
+		SET STATUS = #{status}
+		WHERE NO = #{no}
+	</update>
+	
+	
+	
+	<!-- 게시글 전체 갯수 -->
+	<select id="selectboardcount" parameterType="string" resultType="_int">
+		SELECT COUNT(*)FROM BOARD
+	</select>
+	
+	<!-- 게시글 전체 조회 -->
+	<select id="getboardlist" parameterType="string" resultMap="boardResultMap">
+	SELECT ROWNUM AS BOARD_ROWNUM,
+			   B.NO,
+			   B.TYPE, 
+			   B.CATEGORY,
+			   B.WRITER_NO, 
+			   M.ID,
+			   B.TITLE, 
+			   B.CONTENT, 
+			   B.CONTENT2, 
+			   B.ORIGINAL_FILENAME, 
+			   B.RENAMED_FILENAME, 
+			   B.READCOUNT, 
+			   B.STATUS, 
+			   B.CREATE_DATE, 
+			   B.MODIFY_DATE
+			FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		WHERE (B.STATUS = 'Y' OR B.STATUS = 'N')
+	</select>
+	
+	<!-- 검색 게시글 갯수 -->
+	<select id="selectboardcountsearch" parameterType="map" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		WHERE (B.STATUS = 'Y' OR B.STATUS = 'N') <if test="searchType != null">
+		 <choose>
+        <when test='searchType.equals("writer")'>
+            AND M.ID LIKE '%' || #{keyWord} || '%'
+        </when>
+        <when test='searchType.equals("title")'>
+			AND B.TITLE LIKE '%' || #{keyWord} || '%'
+		</when>
+    </choose>
+	</if>
+	</select>
+	
+	<!-- 검색 게시글 조회 -->
+	<select id="getboardlistsearch" parameterType="map" resultMap="boardResultMap">
+	SELECT ROWNUM AS BOARD_ROWNUM,
+			   B.NO, 
+			   B.TYPE, 
+			   B.CATEGORY,
+			   B.WRITER_NO, 
+			   M.ID,
+			   B.TITLE, 
+			   B.CONTENT, 
+			   B.CONTENT2, 
+			   B.ORIGINAL_FILENAME, 
+			   B.RENAMED_FILENAME, 
+			   B.READCOUNT, 
+			   B.STATUS, 
+			   B.CREATE_DATE, 
+			   B.MODIFY_DATE
+			FROM BOARD B
+		INNER JOIN MEMBER M ON (B.WRITER_NO = M.NO)
+		WHERE (B.STATUS = 'Y' OR B.STATUS = 'N')
+		<if test="searchType != null">
+			 <choose>
+        <when test='searchType.equals("writer")'>
+            AND M.ID LIKE '%' || #{keyWord} || '%'
+        </when>
+        <when test='searchType.equals("title")'>
+			AND B.TITLE LIKE '%' || #{keyWord} || '%'
+		</when>
+    </choose>
+		</if>
+	</select>
+	
+	<!-- 게시글 삭제 -->
+	<update id="updatboardstatus" parameterType="map">
+		UPDATE BOARD
+		SET
+		STATUS = #{status}
+		WHERE
+		NO = #{no}
+	</update>
+	
+	<!-- 게시글 계시 -->
+	<update id="activateboard" parameterType="map" >
+		UPDATE BOARD
+		SET
+		STATUS = #{status}
+		WHERE
+		NO = #{no}
+	</update>
+	
+	<!-- 댓글 전체 갯수 -->
+	<select id="selectreplycount" resultType="_int">
+		SELECT COUNT(*) FROM REPLY
+	</select>
+	
+	<!-- 댓글 전체 조회 -->
+	
+	
+	<!-- 검색 댓글 갯수 -->
+	
+	
+	<!-- 검색 댓글 조회 -->
+	
+	
+	
+	
+	
+	
+</mapper>

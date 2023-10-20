@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='faq'"></th:block> 
+<!-- faq.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/page/faq.css}" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+  	#tbl-board {
+	    border-collapse: collapse;
+	    width: 100%;
+	    border: 1px solid white;
+  	 }
+  	#tbl-board th, td {
+	    border: 1px solid black;
+	    padding: 8px;
+	    text-align: center;
+  	 } 
+     section {
+	     max-width: 100%;
+	     text-align:center;
+     }
+     
+	dl{}
+	dt{height:30px; background:#ffffff; color:#000000; font-weight:bold; border-bottom:1px solid #ccc; text-indent:20px;}/*text-indent 들여쓰기*/
+	dd{margin-left:15px; background:#f5efef; padding:50px;}
+	dt.over{background:#ffffff; cursor:pointer;}
+	dt.selected{background:#ffffff; cursor:default;}/*cursor:default; 기본 커서*/
+</style>
+</th:block>
+<!-- faq.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- Bootstrap JS 및 jQuery -->
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+<div style="width:70%; margin: 0 auto;">
+	<table>
+		<tr class="border-bottom" >
+			<th scope="col" colspan="2" class="th-custom-style" style="color: #082f1c; padding: 12px 10px 10px 20px;">자주 묻는 질문 TOP 8
+			<th:block th:if="${loginMember != null && loginMember.id == 'admin'}">
+			  	<button class="btn btn-sm btn-outline-secondary" type="button" onclick="redirectToWrite('faq')">글쓰기</button>
+		  	</th:block>
+		</tr>
+	</table>
+			 
+	<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+       	[주문/배송] 주문한 상품은 언제 배송되나요?
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong> 당일 오후 3시 전까지는 결제 완료된 제품에 한하여 당일 배송합니다. 그 이후 주문 건은 다음날 배송됩니다.
+		제주권 지역이나 섬 지역을 제외하고는 익일 수령할 수 있으며 주말 및 공휴일은 배송업무가 이루어지지 않습니다.
+		( 택배사의 배송물량증가로 일부 배송이 지연될 수 있습니다 )
+	    </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        [취소/반품/교환] 상품교환 및 반품은 어떻게 하나요?
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        A. 반품 신청은 배송완료 후 7일 이내 [마이페이지] [주문 내역]에서 가능하며 배송 완료인 경우에만 신청이 가능합니다.<br>
+		
+		배송 완료 후 구매 확정한 주문에 대해선 반품이 불가합니다.<br>
+		
+		당사와 협의 없이 진행되는 반품 건에 대해서는 환불이 지연될 수 있습니다.<br>
+		
+		반품의 경우 신청 후 5일 이내에 상품을 발송해 주시고, 환불은 취소 완료 후 2~5일이내(주말 및 공휴일 제외) 처리됩니다.<br>
+		
+		*하자/불량 제품 교환 및 반품은 구매일로 3개월 이내 가능합니다.(3개월 이후 주문건 교환/반품 불가)<br><br>
+		
+		추가 구성(사은품)이 들어간 상품을 구입하시고, 반품 하실 때에는 추가 구성 사은품도 함께 반품하셔야 환불 완료됩니다.<br>
+		
+		상품의 사용 흔적, 오염 등 기타 교환/반품 불가 사유가 검수 후 판단될 시에 고객님께 다시 반송될 수 있습니다.<br>
+		
+		부분 취소에 따른 사은품은 재발송 되지 않습니다. 이벤트에 따라 부분 반품이 불가능할 수 있습니다.<br><br>
+		
+		*반품이 되지 않는 경우<br>
+		1) 배송 완료 후 구매확정한 주문<br>
+		
+		2) 사용한 제품<br>
+		
+		3) 제품에 파손이 있는 경우<br>
+		
+		4) 메이크업 제품의 색상이 마음에 들지 않는 경우<br>
+		
+		5) 하자/불량 제품이더라도 주문일로부터 3개월 이후 주문건은 교환/반품 불가<br><br>
+		
+		구입한 상품에 대한 교환/환불 및 상세한 문의는 마이페이지내의 1:1문의게시판으로 문의 주시면 감사하겠습니다.
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+       [회원정보] 회원 탈퇴는 어떻게 하나요?
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+      	 홈페이지 상단 메뉴에서 [마이페이지] [정보 수정]을 클릭하셔서 탈퇴 신청을 하시면 바로 처리됩니다.<br>
+        
+		*탈퇴 시 유의사항*<br>
+		
+		1) 탈퇴 즉시 모든 개인정보와 적립금/쿠폰이 삭제됩니다.<br>
+		
+		2) 삭제된 적립금/쿠폰은 재가입 후에도 복구가 불가능합니다.<br>
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+        [기타] 고객센터의 상담시간은 언제 인가요?
+      </button>
+    </h2>
+    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        평일 - 10:00 ~ 18:00
+		점심 - 13:00 ~ 14:00
+		토요일/일요일/공휴일 - 휴무
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFive">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+        [주문/배송] 주문은 어떻게 하고 주문 내역은 어떻게 확인하나요?
+      </button>
+    </h2>
+    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        회원만 주문 가능하며 로그인 후 마이페이지>주문내역에서 주문한 내역을 확인 하실 수 있습니다.<br>
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingSix">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+        [주문/배송] 주문은 어떻게 하고 주문 내역은 어떻게 확인하나요?
+      </button>
+    </h2>
+    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        회원만 주문 가능하며 로그인 후 마이페이지>주문내역에서 주문한 내역을 확인 하실 수 있습니다.<br>
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingSeven">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+        [주문/입금/결제] Q. 주문한 상품은 어떻게 결제하나요?
+      </button>
+    </h2>
+    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        신용카드, 핸드폰결제, 간편결제, 계좌이체, 무통장입금(가상 계좌)로 결제가 가능합니다.<br>
+        </strong>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingEight">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+       	[회원정보] 회원정보변경은 어떻게 하나요?
+      </button>
+    </h2>
+    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>
+        회원 로그인 후 마이페이지 내의 개인정보수정에서 수정 가능합니다.
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!-- 페이지 끝에 스크립트 추가 -->
+<script>
+
+// 페이지 로드 시 모든 아코디언 요소를 접힌 상태로 설정
+document.addEventListener("DOMContentLoaded", function() {
+    // 아코디언 버튼 요소를 찾아서 클래스를 추가하여 버튼이 접힌 상태가 되도록 설정
+    var accordionButtons = document.querySelectorAll(".accordion-button");
+    accordionButtons.forEach(function(button) {
+        button.classList.add("collapsed");
+    });
+});
+
+	
+
+
+    
+      // write페이지로 이동 시 게시판 type값을 파라미터 전달
+	  function redirectToWrite(type) {
+	   window.location.href = '/board/write?type=' + type;
+	  };
+</script>
+</div>
+</div>
+</html>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+  
+<mapper namespace="com.hm.forest.admin.model.mapper.AdminMapper">
+
+	<sql id="productListSql">
+	   SELECT  NO, 
+			   CATEGORY, 
+			   NAME,
+			   PRICE, 
+			   CONTENT,
+			   COLOR, 
+			   AMOUNT, 
+			   SIZE_SML, 
+			   STOCK, 
+			   COMPANY, 
+			   DISCOUNTRATE,
+			   SELLING, 
+			   STATUS, 
+			   IMAGE, 
+			   WISH
+		FROM PRODUCT
+		WHERE STATUS = 'Y' 
+	</sql>
+
+
+	<resultMap id="productResultMap" type="Product">
+		<id property="no" column="NO"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="name" column="NAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="content" column="CONTENT"/>
+		<result property="company" column="COMPANY"/>
+		<result property="discountrate" column="DISCOUNTRATE"/>
+		<result property="selling" column="SELLING"/>
+		<result property="status" column="STATUS"/>
+		<result property="image" column="IMAGE"/>
+		<result property="wish" column="WISH"/>
+	</resultMap>
+	
+	<resultMap id="productDetailResultMap" type="Product" extends="productResultMap"> 
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="color" column="COLOR"/>
+		<result property="sizeSml" column="SIZE_SML"/>
+		<result property="stock" column="STOCK"/>
+		<collection property="details" ofType="Detail" javaType="arraylist" columnPrefix="D_" resultMap="detailResultMap" column="NO"/>
+	</resultMap>
+	
+
+	<resultMap id="detailResultMap" type="Detail">
+		<id property="no" column="NO"/>
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="color" column="COLOR"/>
+		<result property="sizeSml" column="SIZE_SML"/>
+		<result property="stock" column="STOCK"/>
+	</resultMap>
+
+	
+	<!-- 제품(PRODUCT) 제품 등록 -->
+	<insert id="insertProduct" parameterType="Product">
+		 <selectKey resultType="_int" keyProperty="no" order="BEFORE">
+		 SELECT SEQ_PD_NO.NEXTVAL FROM DUAL
+		 </selectKey>
+	      INSERT INTO PRODUCT (
+	        NO, 
+	        CATEGORY,
+	        NAME, 
+	        PRICE, 
+	        CONTENT, 
+	        COMPANY, 
+	        DISCOUNTRATE, 
+	        SELLING,
+	        IMAGE, 
+	        WISH
+	    ) VALUES (
+	        #{no},
+	        #{category}, 
+	        #{name}, 
+	        #{price}, 
+	        #{content},
+	        #{company}, 
+	        #{discountrate}, 
+	        #{selling},
+	        #{image}, 
+	        #{wish}
+	    )
+	</insert>
+
+	
+	<!-- 옵션(DETAIL) 등록 -->
+	<insert id="insertDetail" parameterType="Detail">
+	<selectKey resultType="_int" keyProperty="no" order="BEFORE">
+		SELECT SEQ_DETAIL_NO.NEXTVAL FROM DUAL
+	</selectKey>
+	    INSERT INTO DETAIL(
+	    	NO,
+	    	PRODUCT_NO,
+	    	COLOR,
+	    	SIZE_SML,
+	    	STOCK
+	    ) VALUES(
+	    	#{no},
+	    	#{productNo},
+			#{color},
+			#{sizeSml},
+			#{stock}
+		)
+	</insert>
+
+	<select id="selectProductBoardCount" resultType="_int">
+		SELECT COUNT(*) FROM PRODUCT WHERE STATUS = 'Y'
+	</select>
+
+	<select id="selectAll" resultMap="productResultMap">
+	SELECT 
+		    NO, 
+		    CATEGORY, 
+		    NAME, 
+		    PRICE, 
+		    CONTENT, 
+		    COMPANY, 
+		    DISCOUNTRATE, 
+		    SELLING, 
+		    STATUS, 
+		    IMAGE, 
+		    WISH
+	 FROM PRODUCT 
+	 WHERE STATUS = 'Y'
+	 ORDER BY NO DESC
+	</select>
+	 
+	 
+	 <!-- 관리자_제품 수정 -->
+	<update id="updateProduct" parameterType="Product">
+		UPDATE PRODUCT 
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name != null">
+				NAME=#{name},
+			</if>
+			<if test="content != null">
+				CONTENT=#{content},
+			</if>
+			<if test="image != null">
+				IMAGE=#{image},			
+			</if>
+			<if test="price != null">			
+				PRICE=#{price},
+			</if>
+			
+		</trim>			
+		WHERE NO=#{no}
+	</update>
+	
+   
+	<!-- 제품삭제 -->
+	<delete id="updateProductStatus" parameterType="map">
+		UPDATE PRODUCT 
+		SET
+			STATUS = #{status}
+		WHERE NO = #{no}
+    </delete>
+
+
+	 <!-- 제품보기(옵션 포함) 조회 -->
+	 <select id="selectProductBoardByNo" parameterType="_int" resultMap="productDetailResultMap">
+		SELECT P.NO, 
+		       P.CATEGORY, 
+		       P.NAME, 
+		       P.PRICE, 
+		       P.CONTENT, 
+		       P.COMPANY, 
+		       P.DISCOUNTRATE, 
+		       P.SELLING, 
+		       P.STATUS, 
+		       P.IMAGE, 
+		       P.WISH,
+		       D.NO AS "D_NO", 
+		       D.PRODUCT_NO AS "D_PRODUCT_NO",
+		       D.COLOR AS "D_COLOR", 
+		       D.SIZE_SML AS "D_SIZE_SML", 
+		       D.STOCK AS "D_STOCK"
+		 FROM PRODUCT P
+		 JOIN DETAIL D ON P.NO = D.PRODUCT_NO
+		 WHERE P.NO = #{no}
+ 	 </select>
+
+    <!-- 카테고리별 제품 전체 리스트 조회 -->
+	<select id="selectProductListByCategory" parameterType="string" resultMap="productResultMap">
+	  SELECT 
+		    P.NO, 
+		    P.CATEGORY, 
+		    P.NAME, 
+		    P.PRICE, 
+		    P.CONTENT, 
+		    P.COMPANY, 
+		    P.DISCOUNTRATE, 
+		    P.SELLING, 
+		    P.STATUS, 
+		    P.IMAGE, 
+		    P.WISH,
+		    D.NO AS "D_NO",
+		    D.PRODUCT_NO AS "D_PRODUCT_NO",
+		    D.COLOR AS "D_COLOR", 
+		    D.SIZE_SML AS "D_SIZE_SML", 
+		    D.STOCK AS "D_STOCK"
+	 FROM PRODUCT P
+	 JOIN DETAIL D ON P.NO = D.NO
+	 WHERE P.CATEGORY = #{category}
+	 ORDER BY P.NO DESC
+	</select>
+	
+	<!-- 카테고리별 제품 전체 개수 -->
+	<select id="selectProductCountByCategory" resultType="_int">
+		SELECT COUNT(*) 
+		FROM PRODUCT 
+		WHERE STATUS = 'Y' AND CATEGORY =#{category}
+	</select>
+	
+
+	
+	<!-- 비동기로 저장된 값 보여주기 -->
+	<select id="selectProductByProductNo" parameterType="_int" resultMap="productResultMap">
+		SELECT  
+		      NO, 
+		      CATEGORY,
+		      NAME, 
+		      PRICE, 
+		      CONTENT, 
+		      COMPANY, 
+		      DISCOUNTRATE, 
+		      SELLING,
+		      IMAGE, 
+		      WISH
+		FROM PRODUCT
+		WHERE STATUS = 'Y' AND NO = #{No}
+	</select>
+	
+	
+	<!-- 
+	<select id="selectDetailsByProductNo" parameterType="int" resultMap="productResultMap">
+	    SELECT NO, 
+	           CATEGORY,
+	           NAME, 
+	           PRICE, 
+	           CONTENT, 
+	           COMPANY, 
+	           DISCOUNTRATE, 
+	           SELLING,
+	           IMAGE, 
+	           WISH
+	    FROM PRODUCT
+	    WHERE STATUS = 'Y'
+	</select>
+	 -->
+
+	<!-- 단품 주문시 제품 정보 조회 -->
+	<select id="selectItemLists" parameterType="_int" resultMap="productDetailResultMap">
+		SELECT P.NO, 
+		       P.CATEGORY, 
+		       P.NAME, 
+		       P.PRICE, 
+		       P.CONTENT, 
+		       P.COMPANY, 
+		       P.DISCOUNTRATE, 
+		       P.SELLING, 
+		       P.STATUS, 
+		       P.IMAGE, 
+		       P.WISH,
+		       D.NO AS "D_NO", 
+		       D.PRODUCT_NO AS "D_PRODUCT_NO",
+		       D.COLOR AS "D_COLOR", 
+		       D.SIZE_SML AS "D_SIZE_SML", 
+		       D.STOCK AS "D_STOCK"
+		 FROM PRODUCT P
+		 JOIN DETAIL D ON P.NO = D.PRODUCT_NO
+		 WHERE P.NO = #{productNo} AND D.NO = #{detailNo}
+	</select>
+	
+	<!-- 관리자_특정 제품 조회(view) -->
+	 <select id="selectProductAdminBoardByNo" parameterType="_int" resultMap="productDetailResultMap">
+		SELECT NO, 
+		       CATEGORY, 
+		       NAME, 
+		       PRICE, 
+		       CONTENT, 
+		       COMPANY, 
+		       DISCOUNTRATE, 
+		       SELLING, 
+		       STATUS, 
+		       IMAGE, 
+		       WISH  
+		 FROM PRODUCT
+		 WHERE NO = #{no}
+ 	 </select>
+ 	 
+
+	<!-- 관리자 옵션등록 -->
+	<select id="selectAllForDetail" resultMap="productResultMap">
+	SELECT 
+		    NO, 
+		    CATEGORY, 
+		    NAME, 
+		    PRICE, 
+		    CONTENT, 
+		    COMPANY, 
+		    DISCOUNTRATE, 
+		    SELLING, 
+		    STATUS, 
+		    IMAGE, 
+		    WISH
+	 FROM PRODUCT 
+	 WHERE STATUS = 'Y'
+	 ORDER BY NO DESC
+	</select>
+	
+	
+	<!-- 관리자_옵션 상세 보기(detailView) -->
+	 <select id="selectProductDetailBoardByNo" parameterType="_int" resultMap="productDetailResultMap">
+		SELECT P.NO, 
+		       P.CATEGORY, 
+		       P.NAME, 
+		       P.PRICE, 
+		       P.CONTENT, 
+		       P.COMPANY, 
+		       P.DISCOUNTRATE, 
+		       P.SELLING, 
+		       P.STATUS, 
+		       P.IMAGE, 
+		       P.WISH,
+		       D.NO AS "D_NO", 
+		       D.PRODUCT_NO AS "D_PRODUCT_NO",
+		       D.COLOR AS "D_COLOR", 
+		       D.SIZE_SML AS "D_SIZE_SML", 
+		       D.STOCK AS "D_STOCK"
+		 FROM PRODUCT P
+		 JOIN DETAIL D ON P.NO = D.PRODUCT_NO
+		 WHERE P.NO = #{no}
+ 	 </select>
+ 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	 
+ 	
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

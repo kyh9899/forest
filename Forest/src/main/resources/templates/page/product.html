@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='product'"></th:block>      
+<!-- product.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/product.css}" >-->
+<style>
+	#eco > li {
+        display: inline-block;
+        position: relative;
+        list-style-type: none;
+        margin: 10px;
+        margin-left: 150px;
+    }
+    #eco > li > a {
+        display:block; position:relative; padding-bottom:19px;
+    }
+    #eco > li > a > span {
+        position:absolute; bottom:0; left:50%; color:#666; line-height:1.462em; white-space:nowrap; transform:translate(-50%, 0);
+        bottom: -35px;
+    }
+	#content1 {
+		
+	}
+</style>
+</th:block>
+<!-- product.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/product.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+	<div id="content1">
+		<ul id="eco">
+			<li><a href="#"><img src="../images/home10.PNG" style="width: 100px"><span> 제로웨이스트 세트 <br><strike>15,200</strike> &rarr; 12,400원 </span></a></li>
+			<li><a href="#"><img src="../images/home11.PNG" style="width: 100px"><span>섬유탈취제 & 섬유향수 <br> <strike>28,000원</strike> &rarr; 19,600원</span></a></li>
+		</ul>
+	</div>
+
+
+
+<br><br><br><br><br><br>
+    <h5> templates > page > product.html > Content </h5>
+</div>
+</html>

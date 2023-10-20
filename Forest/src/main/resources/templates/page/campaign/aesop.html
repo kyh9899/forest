@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='aesop'"></th:block>      
+<!-- aesop.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/aesop.css}" >-->
+</th:block>
+<!-- aesop.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/aesop.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+
+
+<style>
+    #contents {
+        align:center;     
+        margin: 0 auto;
+        text-align: center;
+    }
+    #cmpg_intro{
+        margin: 50px 0;
+    }
+    #cmpg_intro td {
+        padding: 0 20px;
+    }
+
+  	/*   
+     div {
+        margin: 150px 0;
+    }
+    */
+
+    .cmpg_content > h3 , .cmpg_content td > h3{
+        color: darkgreen;
+        font-size: 28px;
+    }
+    .cmpg_content table {
+        margin: 0 auto;
+
+    }
+
+    aesop1 > span {
+        font-weight: 500;
+    }
+    
+    aesop1 > p {
+        font-size: 22px;
+    }
+
+    aesop1 > p span {
+        font-weight: bold;
+    }
+
+
+</style>
+
+<div id="contents">
+    <div id="cmpg_intro" class="cmpg_content">
+        <table>
+            <tr>
+                <td id="aesop1"><img src="../images/aesop.png"></td>
+                <td style="text-align: left; vertical-align: top; padding-top: 20px; line-height: 40px;">
+                    <h3 style="font-size: 28px; color: darkgreen;">캠페인 정보</h3>
+                    <p>자원 순환을 위해 다 사용한 이솝 화장품 공병을 재활용하는 캠페인을 진행합니다.<br>
+                        이솝 린스 앤 리턴 캠페인을 통해 고객들과 협력해 건강한 지구, 지속 가능한 삶에 <br>
+                        우리 모두가 한 발짝 다가갈 수 있기를 기대합니다.<br><br>
+                        
+                        수거된 이솝 공병은 별도의 재활용 공정을 통해 새로운 자원으로 재탄생 됩니다. <br><br>
+                        
+                        다 쓴 화장품 공병을 깨끗하게 세척해 이솝 매장에 가져와 주세요. <br>
+                        나를 위하는 일이 지구에 해가 되지 않도록, 이솝 린스 앤 리턴 캠페인에 동참해주세요.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>    
+
+    <div class="cmpg_content">
+        <h3>수거 품목</h3>
+        <p><img src="../images/aesop1.png" alt=""></p>
+    </div>
+
+    <div class="cmpg_content">
+        <h3>오프라인 수거 방법</h3>
+        <p><img src="../images/aesop2.png" alt=""></p>      
+    </div>
+    
+    <div class="cmpg_content">  
+        <table>
+            <tr>
+                <td>
+                    <h3 style="text-align: center;">이솝 린스 앤 리턴 캠페인에 동참하는 방법</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; line-height: 40px;">
+                    <p>
+                    <span>Step1</span> 다 사용한 이솝 공병을 깨끗하게 세척해 주세요.<br>
+                    <span>Step2</span> 세척한 공병을 물기 없이 건조해 주세요.<br>
+                    <span>Step3</span> 선별된 이솝 매장에 방문해 공병을 수거함에 넣어주세요.<br><br>
+                    
+                    * 공병 개수의 제한은 없으며, 이솝 공병만 수거 가능합니다. 
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+   
+</div>
+</html>

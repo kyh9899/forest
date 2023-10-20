@@ -1,0 +1,336 @@
+@charset "UTF-8";
+
+
+
+
+/* 댓글창 배경 */
+
+
+.cont_comment {
+	padding-top: 10px;
+    padding-bottom: 29px;
+    background-color: #f8f8f8;
+}
+
+.comment_post{
+    padding-right: 100px;
+    padding-bottom: 10px;
+}
+
+.comment_date {
+   color: #959595;
+}
+
+.comment-writer {
+	font-size: 15px;
+	font-weight: 500;
+}
+
+.opt_more_g{
+	float: right;
+}    
+
+.btn_g_ico {
+	padding: 10px 0;
+	margin: 0;
+    cursor: pointer;
+    border: 0 none;
+    background-color: rgba(0,0,0,0);
+    vertical-align: top;
+}
+
+.btn_more_menu {
+	float: right;
+	background-color: rgba(0,0,0,0);
+}
+
+.btn_cancel {
+	display: inline-block;
+    min-width: 46px;
+    height: 36px;
+    padding-top: 0;
+	margin-right: 5px;
+    line-height: 36px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: top;
+    background-color: #fff;
+    border: 1px solid #c8cacc;
+    color: #6c757d;
+}
+
+.btn_cancle:hover {
+	color:#082f1c;
+}
+
+.ico_bbs {
+	display: inline-block;
+    vertical-align: top;
+    text-indent: -9999px;
+    width: 18px;
+    height: 18px;
+}
+
+.ico_more {
+	background: url(//t1.daumcdn.net/cafe_image/cf_img4/skin/W01/18_more_default.svg);
+	width: 18px;
+    height: 18px;
+}
+
+.reply-text{
+    padding: 0 43px;
+    font-size: 14px;
+    line-height: 1.6;
+     word-break: break-all; /* 긴 단어를 강제로 줄 바꿈 */
+}
+
+/* 댓글 작성란 */
+.CommentWriter {
+    margin: 12px 25px;
+    padding: 16px 10px 10px 18px;
+    border: 2px solid #c8cacc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background: var(--skinCommentWriterBg);
+    background-color: white;
+}
+
+.CommentWriter .comment_inbox {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.blind {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+}
+
+.CommentWriter .comment_inbox_name {
+    display: block;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.comment_inbox_text {
+    max-height: 500px;
+    border-color: white;
+    font-size: 14px;
+    width: 100%;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-decoration: none;
+    color: #5e5d5e;
+}
+
+.comment_inbox_text:hover {
+	color: #5e5d5e;
+}
+
+.CommentWriter .comment_inbox_number {
+    position: absolute;
+    top: 1px;
+    right: 8px;
+    color: #c8cacc;   
+    font-size:11px;
+}
+
+.comment_inbox_text:focus {
+	outline: none;
+}
+
+.CommentWriter .comment_attach {
+    position: relative;
+    height: 35px;
+}
+
+.CommentWriter .attach_box {
+    float: left;
+    padding-top: 10px;
+}
+
+.CommentWriter .attach_box .button_file {
+    overflow: hidden;
+    display: inline-block;
+    margin-top: 1px;
+    margin-right: 16px;
+    cursor: pointer;
+    vertical-align: top;
+}
+
+.CommentWriter .attach_box .button_file .ico-post-photo-323232 {
+    width: 18px;
+}
+.CommentWriter .attach_box .svg-icon {
+    height: 17px;
+    vertical-align: top;
+}
+.CommentWriter .comment_attach .svg-icon {
+    color: var(--skinText323232);
+}
+.svg-icon {
+    pointer-events: none;
+}
+
+svg:not(:root) {
+    overflow-clip-margin: content-box;
+    overflow: hidden;
+}
+
+.CommentWriter .attach_box .button_sticker {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.CommentWriter .attach_box .button_sticker .ico-post-sticker-323232 {
+    width: 17px;
+}
+.CommentWriter .attach_box .svg-icon {
+    height: 17px;
+    vertical-align: top;
+}
+.CommentWriter .comment_attach .svg-icon {
+    color: var(--skinText323232);
+}
+.svg-icon {
+    pointer-events: none;
+}
+
+svg:not(:root) {
+    overflow-clip-margin: content-box;
+    overflow: hidden;
+}
+
+.CommentWriter .register_box {
+    float: right;
+}
+
+.CommentWriter .register_box .button {
+    display: inline-block;
+    min-width: 46px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 13px;
+    color:  #0f5132;
+    border-radius: 6px;
+    text-decoration: none;
+    padding-top: 0;
+    background-color: #e3f4e9;
+    box-sizing: border-box;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: top;
+}
+
+.comment_type{
+	float: right;
+	font-size: 13.5px;
+	border-radius: 3px;
+	text-align: center;
+	background-color: #fff;
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.modify_comment, .delete_comment {
+	text-decoration: none;
+    padding: 7px 12px;
+   
+}
+.opt_container {
+	display:block;
+	padding-right: 18px;
+}
+
+.menu_item{
+	padding: 5px 0;
+}
+
+.menu_item > a:hover {
+	cursor: pointer;
+	background-color: #c0c0c0;
+    color: black;
+}
+
+.comment-img {
+	width: 35px;
+	height: 35px;
+	float: left;
+	margin-top: 13px;
+	margin-right: 8px;
+	border-radius: 100%;
+}
+
+.comment-item {
+    position: relative;
+}
+
+.more-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #6c757d;
+}
+
+.list_comment {
+    margin-left: auto; /* 가운데 정렬을 위해 왼쪽 여백을 auto로 설정 */
+    margin-right: auto; /* 가운데 정렬을 위해 오른쪽 여백을 auto로 설정 */
+    padding-left: 35px;
+    padding-right: 20px;
+}
+
+.btn-custom-reply {
+  --bs-btn-font-size: 0.875rem;
+  --bs-btn-border-radius: 0.1rem;
+  --bs-btn-font-family: ;
+  --bs-btn-font-weight: 400;
+  --bs-btn-line-height: 1.5;
+  --bs-btn-color: #6c757d;
+  --bs-btn-border-color: #dbd8d8;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #082f1c;
+  --bs-btn-hover-border-color: #6c757d;
+  --bs-btn-focus-shadow-rgb: 108, 117, 125;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #6c757d;
+  --bs-btn-active-border-color: #6c757d;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #6c757d;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #6c757d;
+  --bs-gradient: none;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-width: 1px;
+  --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+  --bs-btn-disabled-opacity: 0.65;
+  --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
+  display: inline-block;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--bs-btn-font-family);
+  font-size: var(--bs-btn-font-size);
+  font-weight: var(--bs-btn-font-weight);
+  line-height: var(--bs-btn-line-height);
+  color: var(--bs-btn-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  border-radius: var(--bs-btn-border-radius);
+  background-color: var(--bs-btn-bg);
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.ReplyListCount {
+	font-weight: bold;
+}
+
+

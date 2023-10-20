@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='productMgmt'"></th:block>
+
+<!-- productMgmt.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+	<style>
+	.table > th {
+		width: 25%;
+	}
+	
+	.ck.ck-editor {
+		width: 600px;
+		max-width: 650px;
+	}
+
+	.ck-editor__editable {
+		height: 50vh;
+	}
+	
+	.editor img {
+		max-width: 650px;
+		height: auto;
+	}
+	
+	#addOptionButton {
+    position: fixed;
+    top: 10px; /* 원하는 위치로 조정합니다. */
+    left: 10px; /* 원하는 위치로 조정합니다. */
+    width: 100px; /* 원하는 너비로 조정합니다. */
+    height: 40px; /* 원하는 높이로 조정합니다. */
+    background-color: #082f1c; /* 배경색을 원하는 색상으로 조정합니다. */
+    color: #fff; /* 텍스트 색상을 흰색 또는 원하는 색상으로 조정합니다. */
+    border: none; /* 테두리 제거 */
+    cursor: pointer;
+    z-index: 1; /* 다른 요소 위에 표시하기 위해 z-index 설정 */
+}
+	</style>
+<!-- productMgmt.html 고유 스크립트 추가 -->
+</th:block>
+
+<th:block layout:fragment="script">
+<script th:src="@{/js/ckeditor/ckeditor.js}"></script>
+
+
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+<div id="content" class="container1">
+
+	<form  id="productForm" class="container" action="/admin/productMgmt/insert" method="post" enctype="multipart/form-data">
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+
+
+	<div class="table-div">
+	  <table class="table">
+		  <thead>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="2" class="th-custom-style" style="border-bottom-width: 3px; 
+					border-bottom-color: #082f1c;
+					color: #082f1c;">제품등록</th>
+		    </tr>
+		  </thead>
+		  
+		  <tbody>
+		    <tr>
+		      <th scope="row">카테고리</th>
+		      <td>
+		      	<select id="category" name="category">
+				    <option value="" selected>--- 선택 ---</option>
+				    <option value="kitchen">주방</option>
+				    <option value="style">패션</option>
+				    <option value="eco">친환경키트</option>
+			    </select>
+			 </td>
+		    </tr>
+		    <tr>
+		      <th scope="row">제품명</th>
+		      <td><input type="text" id="name" name="name"></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">판매가</th>
+		      <td><input type="text" id="price" name="price"> </td>
+		    </tr>
+	<!-- 
+		    <tr>
+		      <th scope="row">제품색상</th>
+		      <td><input type="text" id="color" name="color"></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">제품재고</th>
+		      <td><input type="text" min="0" id="stock" name="stock"></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">제품사이즈</th>
+		      <td>
+		      	<select id="sizeSml" name="sizeSml" >
+				    <option value="" selected>--- 선택 ---</option>			    
+				    <option value="F">F</option>
+				    <option value="S">S</option>
+				    <option value="M">M</option>
+				    <option value="L">L</option>
+			    </select>
+			  </td>
+		    </tr>
+		
+		    <input type="button" id="addOptionButton" value="옵션 추가">
+	 -->
+		
+		     
+		    <tr>
+		      <th scope="row">설명</th>
+		      <td><textarea rows="3" cols="100" resize="none" id="content" class="editor" name="content"></textarea></td>
+		    </tr>
+		    <tr>
+		      <th scope="row">대표이미지</th>
+		      <td> <input type="file" id="image" name="upfile"></td>
+		    </tr>
+		    
+		    <!-- 
+		    <tr>
+		   	  <th scope="row">판매상태</th>
+		      <td>
+		      	<select id="selling" name="selling" >
+				    <option value="" selected>--- 선택 ---</option>
+				    <option value="Y">판매중</option>
+				    <option value="N">일시품절</option>
+			    </select>
+			  </td>
+		    </tr>
+		     -->
+		     
+		    <tr>
+		      <th></th>
+		      <td> 
+			      <input class="btn btn-sm btn-outline-secondary" type="submit" id="btnInsert"value="등록">
+			      <input class="btn btn-sm btn-outline-secondary" type="reset" id="btnDelete" value="삭제">
+			      <a class="btn btn-sm btn-outline-secondary" type="button" th:href="@{productMgmtList}">취소</a> 
+			      
+		      </td>
+		      </tr>
+		  </tbody>
+		  </table>
+	  
+	</div>
+	</form>
+</div>        
+ 
+
+	<!-- CKEditor -->
+   <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+	
+   <script>
+	   ClassicEditor
+	   .create(document.querySelector('.editor'))
+	   .then(editor => {
+	       console.log('CKEditor was initialized');
+	   })
+	   .catch(error => {
+	       console.error(error);
+	   });
+	   
+	   var ckeditor_config = {
+			     resize_enable : false,
+			     enterMode : CKEDITOR.ENTER_BR,
+			     shiftEnterMode : CKEDITOR.ENTER_P,
+			     filebrowserUploadUrl : "/admin/productMgmt/ckUpload"
+			   };
+			   
+			   CKEDITOR.replace("content", ckeditor_config);
+	</script>
+	
+	<script>
+    $(document).ready(function () {
+        var optionCount = 0; // 현재 옵션 카운트
+
+        // "옵션 추가" 버튼을 클릭할 때마다 새로운 입력 필드를 추가
+        $('#addOptionButton').click(function () {
+            optionCount++;
+
+            var newOption = '<tr>' +
+                '<th scope="row">제품색상</th>' +
+                '<td><input type="text" id="color' + optionCount + '" name="color' + optionCount + '"></td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th scope="row">제품재고</th>' +
+                '<td><input type="text" min="0" id="stock' + optionCount + '" name="stock' + optionCount + '"></td>' +
+                '</tr>' +
+                '<tr>' +
+                '<th scope="row">제품사이즈</th>' +
+                '<td>' +
+                '<select id="sizeSml' + optionCount + '" name="sizeSml' + optionCount + '">' +
+                '<option value="" selected>--- 선택 ---</option>' +
+                '<option value="F">F</option>' +
+                '<option value="S">S</option>' +
+                '<option value="M">M</option>' +
+                '<option value="L">L</option>' +
+                '</select>' +
+                '</td>' +
+                '</tr>';
+
+            $('table').append(newOption); // 새로운 옵션을 테이블에 추가
+        });
+    });
+</script>	
+
+</div>
+</html>

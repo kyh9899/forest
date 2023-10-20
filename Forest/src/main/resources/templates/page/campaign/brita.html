@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='brita'"></th:block>      
+<!-- aesop.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/aesop.css}" >-->
+</th:block>
+<!-- aesop.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/aesop.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+
+
+<style>
+    #contents {
+        align:center;     
+        margin: 0 auto;
+        text-align: center;
+    }
+    #cmpg_intro{
+        margin: 50px 0;
+    }
+    #cmpg_intro td {
+        padding: 0 20px;
+    }
+
+  	/*   
+     div {
+        margin: 150px 0;
+    }
+    */
+
+    .cmpg_content > h3 , .cmpg_content td > h3{
+        color: darkgreen;
+        font-size: 28px;
+    }
+    .cmpg_content table {
+        margin: 0 auto;
+
+    }
+
+    brita > span {
+        font-weight: 500;
+    }
+    
+    brita > p {
+        font-size: 22px;
+    }
+
+    brita > p span {
+        font-weight: bold;
+    }
+
+
+</style>
+
+<div id="contents">
+    <div id="cmpg_intro" class="cmpg_content">
+        <table>
+            <tr>
+                <td id="brita"><img src="../images/brita.png" style="width: 500px; height: 500px;"></td>
+                <td style="text-align: left; vertical-align: top; padding-top: 20px; line-height: 40px;">
+                    <h3 style="font-size: 28px; color: darkgreen;">캠페인 정보</h3>
+			          <p>비오템은 지속 가능한 순환 경제를 적극적으로 개발하며, 우리 해양을 보전하기 위해 지속적으로 노력하고 있습니다.</p><br>
+					  <p>더불어 새로운 재활용 기술 사용에 앞장서며, <br><br>
+					   최첨단 생명과학 기술을 적용해 물과 바다 생물에 대한 해양 관련 주제를 연구하며 해양 생태계 보전에 앞장서고 있습니다.</p><br>
+                </td>
+            </tr>
+        </table>
+    </div>    
+
+    <div class="cmpg_content">
+        <h3>수거 품목</h3><br>
+       	<p>&#39;브리타 그린 리프 멤버십&#39;은 브리타 필터만 수거 가능합니다.<br />
+		타 브랜드 제품은 수거 및 재활용 불가능하니 유의해 주세요.</p><br>
+    </div>
+
+    <div class="cmpg_content">
+        <h3>오프라인 수거 방법</h3>
+        <p><img src="../images/aesop2.png" alt=""></p>      
+        <p>2023년도부터 필터 최소 배송 수량이 기존 6개에서 9개로 변경되었습니다.<br>
+		   환경을 위해 1박스에 최대한 많은 필터를 담아 보내주세요.<br>
+		   *필터를 최대한 많이 모아 1박스에 보내면 여러 박스를 보내는 것보다 탄소 배출 저감에 기여할 수 있습니다.<br><br></p>      
+    </div>
+    
+    <div class="cmpg_content">  
+        <table>
+            <tr>
+                <td>
+                    <h3 style="text-align: center;">브리타 그린 리프 멤버십 캠페인에 동참하는 방법</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; line-height: 40px;">
+                    <p>
+                    <span>Step1</span> 다 사용한 브리타 필터를 잘 말려 완전히 건조해 주세요.<br/>
+                    <span>Step2</span> 필터 9개 이상이 모이면 테라사이클 홈페이지에서 수거 신청해 주세요.<br>
+                    <span>Step3</span> 수거 신청이 완료되면 등록하신 휴대폰 번호로 카카오톡 알림 메시지가 발송됩니다.<br>
+                    <span>Step4</span> 1박스에 브리타 필터를 최대한 많이 담아 포장 후 집 현관 앞에 놓아주세요!<br>
+                    (영업일 기준 3~4일 내에 택배 기사님이 방문할 예정입니다.)<br><br>
+                    
+                    *필터는 9개 이상이라면 개수 제한 없이 모두 1박스에 담아 수거 가능합니다.<br>
+					**다만, 크기나 너무 큰 박스를 사용하거나 1박스의 무게가 20kg가 넘지 않도록 주의해 주세요.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+   
+</div>
+</html>

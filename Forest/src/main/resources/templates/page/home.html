@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <!-- 필요한 스크립트 및 스타일 시트를 불러옵니다.
+     -->
+    <!-- Bootstrap core JS-->
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+ 	<script th:src="@{/js/jquery-3.7.0.js}"></script>
+
+   
+<th:block th:with="pageName='home'"></th:block>
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!--    <link rel="stylesheet" th:href="@{/css/page/home.css}" >-->
+    <style>
+	 	@import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
+
+        #navi > li {
+            display: inline-block;
+            position: relative;
+            list-style-type: none;
+            margin: 10px;
+            margin-left: 150px;
+            /* top: 10px;
+            left: 260px; */
+        }
+        #navi > li > a {
+            display:block; position:relative; padding-bottom:19px;
+            /* margin: 50px; */
+        }
+        /* #navi > li > a > img {
+            width:50px; height:50px;
+        } */
+        
+        #navi > li > a > span {
+            position:absolute; bottom:0; left:50%; color:#666; line-height:1.462em; white-space:nowrap; transform:translate(-50%, 0)
+        }
+        
+        #product > li {
+            display: inline-block;
+            position: relative;
+            top: 10px;
+            margin-left: -30px;
+        }
+        #product > li > a {
+            display:block; position:relative; padding-bottom:19px;
+            padding: 48px;
+        }
+        #product > li > a > img {
+            width:300px; height:250px;
+        }
+        #product > li > a > span {
+            position:absolute; left:53%; color:#0e0d0d; line-height:1em; white-space:nowrap; transform:translate(-50%, 0)
+        }
+
+        #camp > li {
+            display: inline-block;
+            position: relative;
+            /* top: 10px; */
+        }
+        #camp > li > a {
+            display:block; position:relative; padding-bottom:19px;
+            padding: 50px;
+        }
+        #camp > li > a > img {
+            width:300px; height:250px;
+        }
+        #camp > li > a > span {
+            position:absolute; left:50%; color:#0e0d0d; line-height:1em; white-space:nowrap; transform:translate(-50%, 0)
+        }
+        #content1{}
+        #content2{}
+        #content3{text-align: center;}
+        #content4{}
+		
+		/* Apply left padding to all li elements */
+		.campaign-list li {
+		    padding-left: 150px;
+		}
+		
+		/* Reset padding for every third li element */
+		.campaign-list li:nth-child(3n) {
+		    padding-top: 20px;
+		    padding-bottom: 20px;
+		}
+		
+		/* 버튼 스타일 */
+	      .btn_prev, .btn_next {
+	          display: inline-block;
+	          cursor: pointer;
+	      }
+	      
+		.swiper {
+		  width: 500px;
+		  height: 100px;
+		  position: relative;
+		}
+		
+		.swiper .swiper-slide {
+		  height: 100px;
+		  background-color: orange;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  font-size: 24px;
+		  font-weight: bold;
+		}
+		
+		.swiper-slide > a {
+		 text-decoration: none;
+		 color: darkslateblue;
+		}
+		
+		.material-icons {
+		  font-size: 30px;
+		  color: white;
+		}
+		
+		.swiper-button-prev::after,
+		.swiper-button-next::after{
+		  content: "";
+		  display: none;
+		}
+		
+		.swiper-pagination {
+		  color: white;
+		  text-align: center;
+		  transition: .3s opacity;
+		  transform: translate3d(0,0,0);
+		  position: relative;
+		  padding-top:30px; 
+		}
+		
+		.swiper-button-prev,
+		.swiper-button-next {
+		  width: 30px;
+		  height: 30px;
+		  border: 2px solid white;
+		  border-radius: 50%;
+		  position: absolute;
+		  top: 50px;
+		  z-index: 1;
+		  cursor: pointer;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		}
+		.swiper-button-prev {
+		  left: 120px;
+		}
+		.swiper-button-next {
+		  right: 120px;
+		}
+		.FRM {
+			text-align: center;
+		}
+		.FRP{
+			text-align: center;
+		}
+		.FRDIV{
+			text-align: center;
+		}
+		.FRDIV img {
+		    margin: 2px; /* 원하는 간격으로 조정할 수 있습니다 */
+		    padding: 3px; /* 원하는 간격으로 조정할 수 있습니다 */
+		}
+		
+		.COH {
+			text-align: center;
+		}
+    </style>
+    
+</head>
+</th:block>
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!--    <script th:src="@{/js/page/home.js}"></script>-->
+</th:block>
+
+
+
+<!-- Content -->
+<div layout:fragment="content">
+   <div>
+        <div id="content1">
+           <!-- 
+            <ul id="navi" style="text-align: center;">
+                <li><a href="/program"><img src="../images/home1.PNG"><span>원데이 클래스</span></a></li>
+                <li><a href="/program"><img src="../images/home1.PNG"><span>참여형 클래스</span></a></li>
+                <li><a href="/products/kitchen"><img src="../images/home1.PNG"><span>제품보기</span></a></li>
+                <li><a href="/board/act"><img src="../images/home1.PNG"><span>실천인증</span></a></li>
+                <li><a href="board/notice"><img src="../images/home1.PNG"><span>공지사항</span></a></li>
+            </ul>
+            -->
+        </div>
+        <br> <br>
+        <div id="content2">
+            <h3 class="FRM" style="color: rgb(5, 71, 5);" ><strong>FORE:ST MISSION</strong></h3>
+                <p class="FRP">일회용품 사용량 증가와 과잉 소비는 세계적인 환경 위기로 이어졌습니다.  <br>
+                쓰레기 대부분은 재활용이 가능함에도 불구하고 수익성이 없다는 이유로 재활용되기 보다는 소각 또는 매립되어 지구를 오염시키고 있습니다. <br>
+                <strong style="color: rgb(5, 71, 5);">FORE:ST</strong>의 미션은 <strong>R</strong>educe <strong>R</strong>euse <strong>R</strong>ecycle <strong>R</strong>ecovery의 <strong style="color: red;">4</strong> RE_ACT를 통한 자원 순환입니다.</p>
+                <div class="FRDIV">
+                <img src="../images/home2.PNG" style="width: 600px; height: 400px;">
+                <img src="../images/home3.PNG" style="width: 600px; height: 400px;"> 
+                <br>
+                <img src="../images/home4.PNG" style="width: 600px; height: 400px;">
+                <img src="../images/home9.PNG" style="width: 600px; height: 400px;">
+                </div>
+        </div>
+        <div id="content3">
+            <ul id="product">
+                <h4 style="color: rgb(5, 71, 5); margin-top: 150px; text-align: center; font-weight: 500;">상품 / 기획전</h4> <br>
+                <h6 class="COH"><a href="/products/kitchen"><span style="margin-bottom: 100px">더보기 + </span></a></h6>
+                <li><a href="/event/zeroweist"><img src="../images/home10.PNG"><span style="bottom: -25px;">[주식회사] 제로웨이스트 세트 <br> <br> &nbsp; &nbsp; &nbsp;<strike>15,200</strike> &rarr; 12,400원 </span></a></li>
+                <li><a href="/event/voive"><img src="../images/home11.PNG"><span style="bottom: -38px;"> &nbsp; &nbsp;보이브 멀티퍼퓸 <br> 섬유탈취제 & 섬유향수 <br><br> <strike>28,000원</strike> &rarr; 19,600원 </span></a></li>
+                <li><a href="/event/bokit"><img src="../images/home12.PNG"><span style="bottom: -25px;">[보킷] 친환경 문구세트 숲 <br><br><strike>12,300원</strike> &rarr;  8,900원 </span></a></li>
+                <li><a href="/event/maysum"><img src="../images/maysum.png"><span style="bottom: -38px;">[주식회사] 모두애 휴대용 4종 세트 제로웨이스트 <br>  &nbsp; &nbsp; &nbsp;휴대용 4종 세트<br><br> <strike>11,700원</strike> &rarr;  8,700</span></a></li>
+                
+            </ul>
+        </div>
+	<div class="swiper-container" style="background-color: aliceblue; padding-bottom: 20px; width: 100%;">
+    <h4 id="tt" style="color: rgb(5, 71, 5); margin-top: 150px; text-align: center; padding-top: 15px; font-size: 40px; font-weight: 500;">진행 중인 캠페인</h4>
+    <p style="text-align: center; font-size: 20px;">건강한 지구를 만들기 위한 자원 순환 캠페인</p>
+    <div class="swiper-wrapper" style="margin-top: 30px;">
+        <!-- Each set of 3 campaigns is a group -->
+        <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center; ">
+            <a href="/campaign/aesop">
+                <span style="text-align: center; font-weight: 500;  font-size: 20px;">신세계인터내셔날 S.I 뷰티 캠페인 <br> 화장품 공병 수거 캠페인</span><br>
+                <br><img src="../images/home14.PNG" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+        <!-- Add the additional slides with the provided content -->
+        <!-- Modify the following lines to add or remove slides as needed -->
+        <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <a href="/campaign/biotherm">
+                <span style="text-align: center; font-weight: 500;  font-size: 20px;">비오템 <br> 화장품 공병 재활용 캠페인</span>
+                <br><br><img src="../images/biotherm.png" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+        <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <a href="/campaign/brita">
+                <span style="text-align: center; font-weight: 500;  font-size: 20px;">브리타 그린 리프 멤버십 <br> 필터 재활용 프로그램</span>
+                <br><br><img src="../images/brita.png" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+ 	<!-- Add the additional slides with the provided content -->
+       <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <a href="/campaign/melixir">
+                <span style="text-align: center; font-weight: 500; font-size: 20px;">멜릭서 me:cycle 켐페인 <br> me:cycle <br></span>
+                <br><img src="../images/melixir.PNG" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+        <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <a href="/campaign/boonbastick">
+                <span style="text-align: center; font-weight: 500;  font-size: 20px;">빙그레 분타스틱 캠페인 <br> 빙그레 바나나맛우유</span>
+                <br><br><img src="../images/boonbastick.PNG" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+        <div class="swiper-slide" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+            <a href="/campaign/mbci">
+                <span style="text-align: center; font-weight: 500;  font-size: 20px;">가져와요 플라스틱, 지켜가요 우리바다 <br> Plastic Free Tomorrow </span>
+                <br><br><img src="../images/mbci.PNG" style="width: 450px; height: 450px; border-radius: 20px / 20px;">
+            </a>
+        </div>
+        <!-- End of additional slides -->
+
+    </div>
+
+    <!-- Add more sets of 3 campaigns here as needed -->
+
+    <div class="swiper-pagination"></div>
+
+    <div class="swiper-button-prev">
+        <div class="material-icons"></div>
+    </div>
+    <div class="swiper-button-next">
+        <div class="material-icons"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        let swiper = new Swiper('.swiper-container', {
+            autoplay: {
+                delay: 5000
+            },
+            loop: true,
+            slidesPerView: 3, // Display three slides per view
+            spaceBetween: 10,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true
+            },
+            navigation: {
+                prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next'
+            }
+        });
+
+        // 슬라이드가 변경될 때
+        swiper.on('slideChange', function () {
+            // 현재 활성 슬라이드의 인덱스 가져오기
+            let currentIndex = swiper.activeIndex;
+
+            // 다음 세 슬라이드를 숨기고
+            for (let i = currentIndex + 3; i < currentIndex + 6; i++) {
+                let slideToHide = swiper.slides[i];
+                if (slideToHide) {
+                    slideToHide.style.display = 'none';
+                }
+            }
+
+            // 나머지 세 슬라이드를 다시 보이게 하기
+            for (let i = currentIndex; i < currentIndex + 3; i++) {
+                let slideToShow = swiper.slides[i];
+                if (slideToShow) {
+                    slideToShow.style.display = 'block';
+                }
+            }
+        });
+    });
+</script>
+
+
+    </div>
+
+</div>
+</html>

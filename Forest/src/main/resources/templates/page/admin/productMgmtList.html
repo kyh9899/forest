@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='productMgmtList'"></th:block>      
+<!-- productMgmtList.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+	
+<th:block layout:fragment="script">
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+<div id="content" class="container1">
+<div class="sub-menu">
+				  <ul>
+				    <li>
+				      <a th:href="@{/admin/salesMgmt}" th:classappend="${pageName eq 'salesMgmt'} ? 'active-menu' : ''">매출관리</a>
+				      <a th:href="@{/admin/productMgmtList}" th:classappend="${pageName eq 'productMgmtList'} ? 'active-menu' : ''">제품관리</a>
+				      <a th:href="@{/admin/memberMgmt}" th:classappend="${pageName eq 'memberMgmt'} ? 'active-menu' : ''">회원관리</a>
+				      <a th:href="@{/admin/boardMgmt}" th:classappend="${pageName eq 'boardMgmt'} ? 'active-menu' : ''">게시판관리</a>
+				    </li>
+				  </ul>
+				</div>
+ <div class="table-div">
+	  <table class="table table table-hover">
+		  <thead>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="5" class="th-custom-style" style="border-bottom-width: 3px; 
+				  border-bottom-color: #082f1c;
+				  color: #082f1c;">등록한 제품 목록
+
+			  	<button class="btn btn-sm btn-outline-secondary" type="button" onclick="redirectToWrite('productMgmt')">제품등록하기</button>
+			  	
+			  	<button class="btn btn-sm btn-outline-secondary" type="button" onclick="redirectToDetail('productMgmtDetail')">재고등록</button>
+			  	 
+			 
+			  </th>
+		    </tr>
+		  </thead>
+		  
+		  <tbody>
+		  	    <tr style="text-align: center;">
+					<th>대표사진</th>
+					<th>제목</th>
+					<th>가격</th>
+					<th>버튼</th>
+				</tr>
+				<tr class="clickable-row" style="text-align: center;" th:each="product : ${productlists}" th:attr="data-href=@{/admin/productMgmtView?no={no}(no=${product.no})}">
+			        <td ><img th:src="@{/static/upload/product/} + ${product.image}" style="width: 100px; height: 100px; overflow: hidden; object-fit: cover;"></td>
+			        <td th:text="${product.name}" style="text-align:left; width:60%;"></td>   
+			        <td th:text="${product.price}" style="text-align:left; width:60%;"></td> 
+			    	<td><input type="button" class="btnCheck" value="재고관리" th:attr="data-product-no=${product.no}, data-href=@{/admin/productMgmtDetailView?no={no}(no=${product.no})}"> </td>
+			    </tr>
+			   
+			
+		  </tbody>
+	  </table>
+	</div>
+			         
+
+
+	  
+	<!-- Pagination -->
+	<div class="table-div">
+		<div id="pageBar">
+		  
+		    <!-- 이전 페이지로 -->
+		    <i class="fa-sharp fa-regular fa-angle-left" style="color: #0f5132;"></i>
+		    <a class="a-pagination-move" th:href="@{/admin/productMgmtList(page=${pageInfo.prevPage})}" th:text="'&lt;'" style="color: #082f1c;"></a>
+
+		    <!-- 10개 페이지 목록 -->
+			<span th:each="pageNumber : ${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+			    <a class="a-pagination current-page" th:if="${pageNumber == pageInfo.currentPage}" disabled="disabled" th:text="${pageNumber}"></a>
+			    <a class="a-pagination" th:unless="${pageNumber == pageInfo.currentPage}" th:href="@{/admin/productMgmtList(page=${pageNumber})}" th:text="${pageNumber}"></a>
+			</span>
+		
+		    <!-- 다음 페이지로 -->
+		    <a class="a-pagination-move" th:href="@{/admin/productMgmtList(page=${pageInfo.nextPage})}" th:text="'&gt;'" style="color: #082f1c;"></a>
+		   
+		</div>
+		</div>
+	</div>
+
+
+	
+	
+	<script> 
+	document.addEventListener("DOMContentLoaded", function () {
+	    var rows = document.querySelectorAll(".clickable-row");
+	    rows.forEach(function (row) {
+	        row.addEventListener("click", function (event) {
+	            // 클릭한 요소가 클래스 "btnCheck"인 버튼이 아닌 경우에만 작동
+	            if (!event.target.classList.contains("btnCheck")) {
+	                var href = row.getAttribute("data-href");
+	                if (href) {
+	                    window.location.href = href;
+	                }
+	            }
+	        });
+	    });
+
+	    var btnChecks = document.querySelectorAll(".btnCheck");
+	    btnChecks.forEach(function (btnCheck) {
+	        // 버튼의 클릭 이벤트 처리
+	        btnCheck.addEventListener("click", function (event) {
+	            // data-product-no 속성에서 product.no 가져오기
+	            var productNo = btnCheck.getAttribute("data-product-no");
+	            
+	            console.log("no 값 {} :" + productNo)
+	            
+
+	            // AJAX 요청을 통해 product.no를 서버에 전달
+	            $.ajax({
+	                type: 'GET', // 또는 'POST', 서버 측에서 어떤 메서드를 지원하는지에 따라 다름
+	                url: '/admin/productMgmtDetailView?no=' + productNo, // 서버의 엔드포인트 URL
+	              // data: { no: productNo }, // product.no를 서버에 전달
+	                success: function (response) {
+	                    // 서버로부터 받은 데이터(response)를 사용하여 원하는 동작 수행
+	                    // 예: productMgmtDetailView에 제품 정보를 표시
+	                    console.log("제품 정보: " + JSON.stringify(response));
+	                    // 이후 동적으로 productMgmtDetailView를 업데이트
+	                    
+	                    window.location.href = '/admin/productMgmtDetailView';
+	                    
+	                   
+	                },
+	                
+	                error: function (error) {
+	                    console.error("오류 발생: " + error);
+	                }
+	            });
+
+	            event.stopPropagation(); // 이벤트 버블링을 중지하여 행의 클릭 이벤트를 방지
+	        });
+	    });
+	});
+		    
+		    function redirectToWrite() {
+				   window.location.href = '/admin/productMgmt';
+				  };
+		  
+			function redirectToDetail(url) {
+				   window.location.href = '/admin/productMgmtDetail';
+			 	  };
+			 	
+				  
+	</script>
+	
+	<!-- 
+	
+	  var rows = document.querySelectorAll(".clickable-row");
+	    rows.forEach(function(row) {
+	        row.addEventListener("click", function() {
+	            var href = row.getAttribute("data-href");
+	            if (href) {
+	                window.location.href = href;
+	            }
+	        });
+	    });
+	
+	 -->
+	
+
+	
+
+</div>
+
+</html>

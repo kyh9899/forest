@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='salesMgmt'"></th:block>      
+<!-- programMgmt.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/salesMgmt.css}" >-->
+</th:block>
+<!-- slaesMgmt.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/salesMgmt.js}"></script>-->
+</th:block>
+
+
+<!-- Content -->
+<div layout:fragment="content">
+	<div class="table-div">
+	  <table class="table">
+		  <thead>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="2" class="th-custom-style" style="border-bottom-width: 3px; 
+					border-bottom-color: #082f1c;
+					color: #082f1c;">매출관리 _ 서비스 준비 중입니다.</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+			  <td style="height: 300px; font-size:20px; text-align: center; vertical-align:middle;">
+			  "서비스 준비 중입니다."
+			  </td>
+		  </tbody>
+		 
+	  </table>
+	</div>
+	
+	
+</div>
+</html>

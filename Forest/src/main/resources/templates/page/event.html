@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='event'"></th:block>      
+<!-- program.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/event.css}" >-->
+</th:block>
+<!-- program.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/event.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+		<div id="content1">
+            <ul id="product">
+                <h4 style="color: rgb(5, 71, 5); margin-top: 150px;">이벤트 / 기획전</h4>
+                <li><a href="#"><img src="../images/home10.PNG"><span style="bottom: -25px;">주식회사 크랫딧 <br> 주식회사 | 제로웨이스트 세트 <br> <br><strike>15,200</strike> &rarr; 12,400원 </span></a></li>
+                <li><a href="#"><img src="../images/home11.PNG"><span style="bottom: -38px;">주식회사 인비저블 컴퍼니 <br> 보이브 멀티퍼퓸 섬유탈취제 <br> 섬유향수 <br><br> <strike>28,000원</strike> &rarr; 19,600원 </span></a></li>
+                <li><a href="#"><img src="../images/home12.PNG"><span style="bottom: -25px;">주식회사 더사랑 <br> [보킷] 친환경 문구세트 숲 <br><br> 8,900원 </span></a></li>
+                <li><a href="#"><img src="../images/home13.PNG"><span style="bottom: -38px;">주식회사 오랜 <br> [오랜] 오가닉 다회용 재사용 <br> 화장솜 제로웨이스트 <br><br> 8,700</span></a></li>
+                
+            </ul>
+        </div>	
+	
+	
+	
+	
+	
+    <h5> templates > page > event.html > Content </h5>
+</div>
+</html>

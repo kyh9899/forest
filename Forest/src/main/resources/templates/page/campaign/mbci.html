@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='mbci'"></th:block>      
+<!-- aesop.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/aesop.css}" >-->
+</th:block>
+<!-- aesop.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/aesop.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+
+
+<style>
+    #contents {
+        align:center;     
+        margin: 0 auto;
+        text-align: center;
+    }
+    #cmpg_intro{
+        margin: 50px 0;
+    }
+    #cmpg_intro td {
+        padding: 0 20px;
+    }
+
+  	/*   
+     div {
+        margin: 150px 0;
+    }
+    */
+
+    .cmpg_content > h3 , .cmpg_content td > h3{
+        color: darkgreen;
+        font-size: 28px;
+    }
+    .cmpg_content table {
+        margin: 0 auto;
+
+    }
+
+    mbci > span {
+        font-weight: 500;
+    }
+    
+    mbci > p {
+        font-size: 22px;
+    }
+
+    mbci > p span {
+        font-weight: bold;
+    }
+
+
+</style>
+
+<div id="contents">
+    <div id="cmpg_intro" class="cmpg_content">
+        <table>
+            <tr>
+                <td id="mbci"><img src="../images/mbci.png" style="width: 500px; height: 500px;"></td>
+                <td style="text-align: left; vertical-align: top; padding-top: 20px; line-height: 40px;">
+                    <h3 style="font-size: 28px; color: darkgreen;">캠페인 정보</h3>
+			                <p>지난 2018년부터 테라사이클은 이마트, 한국P&amp;G와 함께 &lsquo;플라스틱 회수 캠페인&rsquo;을 지속해왔습니다. <br>
+			                2020년 해양환경공단과의 파트너십에 이어 21년도에는 국내 최대 철강회사인 포스코와의 파트너십 체결을 통해 매년 캠페인을 확장하고 있습니다.<br>
+			                이렇게 함께 하는 5개사는 &lsquo;가져와요 플라스틱 지켜가요 우리바다&rsquo;라는 주제 아래 해양환경 보호를 위한 더욱 다채로운 소비자 참여형 캠페인을 진행합니다.</p>
+							<p>이번 캠페인을 통해 테라사이클은 서울, 경기, 인천 지역 이마트 수도권 전 점포에 설치된 플라스틱 회수함에서 재활용이 어려운 플라스틱을 회수합니다.<br>
+							소비자들이 모아준 플라스틱은 테라사이클의 재활용 공정을 통해 재생원료로 재탄생됩니다.</p>
+							<p>고객들의 참여로 모아진 폐플라스틱은 어린이 교통안전 반사판 21,000개, 접이식 쇼핑카트 13,500개, 줍깅 집게 3,000개 등 <br>
+							다양한 모습으로 업사이클링 후 지역사회에 기부되어 캠페인의 진정성을 실천하고 있습니다.</p>
+                </td>
+            </tr>
+        </table>
+    </div>    
+
+    <div class="cmpg_content">
+        <h3>수거 품목</h3><br>
+       	<p>샴푸 용기, 칫솔 등 복합재질로 이루어져 일반 가정에서 분리배출 시 재활용이 어려운 생활용품 플라스틱입니다.&nbsp;</p>
+    </div>
+
+    <div class="cmpg_content">
+        <h3>오프라인 수거 방법</h3>
+        <p><img src="../images/aesop2.png" alt=""></p>      
+		<p>이마트 오프라인 점포 약 79개 매장에 설치된 회수함에 가져온 플라스틱 품목을 넣어주세요!</p>
+		<p>폐플라스틱 없는 깨끗한 바다를 위해 앞으로도 함께 &lsquo;가져와요 플라스틱, 지켜가요 우리바다&rsquo;!</p>    
+        <br>
+    </div>
+    
+    <div class="cmpg_content">  
+        <table>
+            <tr>
+                <td>
+                    <h3 style="text-align: center;">이마트 플라스틱 회수 캠페인에 동참하는 방법</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; line-height: 40px;">
+                    <p>
+                    <span>Step1</span> 이마트 오프라인 점포 약 79개 매장에 설치된 회수함에 가져온 플라스틱 품목을 넣어주세요!<br />
+                    <br>
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+   
+</div>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <th:block th:with="pageName='myPage'"></th:block>
+    <!-- myPage.html 고유 CSS 추가 -->
+    <th:block layout:fragment="css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	function openZipSearch() {
+	    new daum.Postcode({
+	    	oncomplete: function(data) {     
+			var addr = ''; 
+			if (data.userSelectedType === 'R') { 
+				addr = data.roadAddress;
+			} else {
+				addr = data.jibunAddress;
+			}
+
+			$("#zip_code").val(data.zonecode);
+			$("#address1").val(addr);
+			$("#addr_dtl").val("");
+			$("#addr_dtl").focus();
+	        }
+	    }).open();
+	}
+	</script>
+    </th:block>
+</head>
+<body>
+    <!-- Content -->
+    <div layout:fragment="content">
+        <div class="header" style="text-align: center;">
+            <h3 style="color: #0f5132; font-weight: bold;">개인 정보 수정</h3>
+            <hr style="border-width: 1px 0 0 0; border-color: #ccc;">
+        </div>
+        
+        <div id="checkedPwd" style="text-align: center; padding: 20px; background-color: #f5f5f5; border: 1px solid #ccc; border-radius: 5px; width: 300px; margin: 0 auto;">
+    <h2 style="font-size: 24px; color: black; font-weight: bold;">비밀번호를 입력하세요</h2>
+    <input type="password" id="userPasswordInput" style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; margin: 10px 0;">
+    <button id="checkPasswordButton" style="padding: 10px 20px; font-size: 16px; background-color: #0f5132; color: #fff; border: none; border-radius: 5px; cursor: pointer;">확인</button>
+</div>
+
+
+        <form class="validation-form" th:action="@{/myPage}" method="POST" style="width: 50%; margin: 0 auto; display: none;" id="updateInfo" >
+            <div style="justify-content: center;display: flex; text-align: center; margin: 0 auto;">
+                <table class="table">
+                    <tr>
+                        <th>아이디</th>
+                        <td><span sec:authentication="principal.id"></span></td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td><span sec:authentication="principal.name"></span></td>
+                    </tr>
+                     <tr>
+                        <th>이메일</th>
+                        <td><span sec:authentication="principal.email"></span></td>
+                    </tr>
+                    <tr>
+					 	<th rowspan="3">비밀번호 변경</th>
+					    <td><input type="password" name="newPassword" id="newPassword" class="form-control" placeholder="새 비밀번호"></td>
+					</tr>
+					<tr>
+					    <td><input type="password" name="confirmPassword" id="confirmPassword" class="form-control" placeholder="새 비밀번호 확인"><span id="message" style="font-size:13px;"></span></td>
+					    
+					</tr>
+					<tr>
+					    <td><input type="password" name="currentPassword" id="currentPassword" class="form-control" placeholder="현재 비밀번호"></td>
+					</tr>
+                    <tr>
+                        <th rowspan="3">주소</th>
+                        <td><input type="text" class="form-control"  id="zip_code" name="pcode" onclick="openZipSearch();" th:value="${#authentication.principal.pcode}" readonly="readonly" placeholder="우편번호" required></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" id="address1" name="address1" onclick="openZipSearch();" th:value="${#authentication.principal.address1}" readonly="readonly" placeholder="주소" required></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control" id="address2" name="address2" th:value="${#authentication.principal.address2}" placeholder="상세주소" required></td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">수신설정</th>
+                        <td><input type="checkbox"> 수신 동의</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"> 추가 수신 동의</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="container" style="text-align: center;">
+                <input type="button" id="btnDelete" class="btn btn-primary btn-lg" value="탈퇴하기">
+                <button class="btn btn-primary btn-lg" type="submit">회원정보수정</button>
+            </div>
+			 <div class="modal fade" id="myModal">
+			  <div class="modal-dialog modal-dialog-centered">
+			    <div class="modal-content">
+			      <!-- 모달 헤더 -->
+			      <div class="modal-header" style="text-align: center; display: block;">
+			        <h4 class="modal-title" style="font-weight:bolder;">탈퇴하시겠습니까?</h4>
+			      </div>
+			
+			      <!-- 모달 본문 -->
+			      <div class="modal-body" style="text-align: center; display: block; color:black; font-weight:bolder;">
+			        <h5>회원님의 개인 정보는 영구 삭제되며<br>복구할 수 없습니다.</h5>
+			      </div>
+			
+			      <!-- 모달 하단 -->
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary closeModal" data-dismiss="modal">취소</button>
+			        <button type="button" id="confirmDelete" class="btn btn-primary">탈퇴</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+function checkPassword() {
+    var newPwd = document.getElementById("newPassword").value;
+    var checkPwd = document.getElementById("confirmPassword").value;
+    var message = document.getElementById("message");
+
+    if (newPwd === checkPwd) {
+        message.textContent = "비밀번호가 일치합니다.";
+        message.style.color = "green";
+    } else {
+        message.textContent = "비밀번호가 일치하지 않습니다.";
+        message.style.color = "red";
+    }
+}
+
+// 입력값이 변경될 때마다 비밀번호 확인 함수 호출
+document.getElementById("newPassword").addEventListener("input", checkPassword);
+document.getElementById("confirmPassword").addEventListener("input", checkPassword);
+
+$(document).ready(() => {
+    // 탈퇴 버튼을 클릭하면 모달 창을 보이도록 설정
+    $('#btnDelete').on('click', () => {
+        $('#myModal').modal('show');
+    });
+
+    // 모달 창의 확인 버튼을 클릭하면 /delete 페이지로 이동
+    $('#confirmDelete').on('click', () => {
+        location.replace('/delete');
+    });
+
+    // 모달 창의 닫기 버튼을 누르거나 모달 외부를 클릭하면 모달을 숨깁니다.
+    $('.closeModal').on('click', () => {
+        $('#myModal').modal('hide');
+    });
+});
+
+function checkedPassword() {
+    var userPassword = document.getElementById("userPasswordInput").value; // 사용자가 입력한 비밀번호
+
+    // 서버에 비밀번호 확인 요청을 보냅니다.
+    $.ajax({
+    type: "GET",
+    url: "/member/passwordCheck",
+    data: { userPassword: userPassword },
+    success: function(response) {
+        if (userPassword === "") {
+            alert("비밀번호를 입력해주세요.");
+        } else if (response.duplicate) {
+            // 비밀번호가 일치하는 경우
+            $("#updateInfo").css("display", "block");
+            $("#checkedPwd").css("display", "none");
+        } else {
+            // 비밀번호가 일치하지 않는 경우
+            alert("비밀번호가 일치하지 않습니다.");
+        }
+    },
+    error: function() {
+        alert("비밀번호 확인 중 오류가 발생했습니다.");
+    }
+});
+}
+
+// HTML에서 비밀번호 확인 버튼에 이벤트 핸들러를 연결합니다.
+document.getElementById("checkPasswordButton").addEventListener("click", checkedPassword);
+</script>

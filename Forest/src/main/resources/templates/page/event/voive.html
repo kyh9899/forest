@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+      
+<!-- csrf 토큰을 비동기통신으로 넘기기 위한 설정 -->
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}">
+<meta th:name="_csrf" th:content="${_csrf.token}">
+
+<th:block th:with="pageName='cart'"></th:block>      
+<th:block layout:fragment="css">
+
+</th:block>
+<!-- cart.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- 이모티콘 -->
+    <script src="https://kit.fontawesome.com/74362490cf.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+<div id="tab_menu_content">							
+	<div id="tab1" class="tab-contents">
+		<!-- 220616 추가:서울시 우수기업인증이 있을경우  -->
+		<div class="detail_view"  style="text-align: center;">
+		<img src="../images/voive.PNG" style="width: 1200px;"/>
+		</div>
+	</div>
+</div>
+</div>

@@ -1,0 +1,123 @@
+a {
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+header tr:nth-child(2) {
+    text-align: center;
+	font-size: 22px;
+	color: darkslategray;
+	opacity: 80%;
+	text-shadow: 1px 1px white, -0.5px -0.5px black;
+}
+
+footer td {
+    padding-top: 12px;
+}
+
+#home {
+    margin-bottom: 150px;
+    justify-content: center;
+    display: flex;
+}
+
+#home .img_box {
+    width: 22%;
+    height: 50%;
+    line-height: 1em;
+    cursor: pointer;
+}
+
+#home .img_box img {
+	width: 100%; 
+	height: 200px;
+	object-fit: cover;
+	transition: transform 0.2s ease-in-out;
+}
+
+#home .img_box img:hover {
+	transform: scale(1.25);
+}	
+ 
+
+#home .img_box div:nth-child(2){
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+}
+
+#home .img_box span {
+    opacity: 60%;
+    font-size: 11px;
+}
+
+.banner {
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+}
+
+.banner div {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    color: #EEF1FF;
+    font-size: 32px;
+    text-shadow: 1px 1px 5px black;
+    user-select: none;
+}
+
+
+#home .img_box {
+    width: 22%;
+    height: 50%;
+    line-height: 1em;
+    margin-right: 3%;
+}
+
+#oneDay .img_box img {
+	width: 100%; 
+	height: 200px;
+	object-fit: cover;
+}
+ 
+
+#oneDay .img_box div:nth-child(2){
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+}
+
+#oneDay .img_box span {
+    opacity: 60%;
+    font-size: 11px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

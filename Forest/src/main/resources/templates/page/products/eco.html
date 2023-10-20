@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='eco'"></th:block>      
+<!-- productMgmtList.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+
+</th:block>
+	
+<th:block layout:fragment="script">
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+<div id="content1">
+
+<!-- test nav -->
+<div class="nav-scroller py-1 mb-2">
+	
+
+</div>
+
+ <div class="table-div">
+	  <div class="py-5" >
+            <div class="container px-4 px-lg-5 mt-5" style="text-align: center;" >
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-lg-4 justify-content-center"> 
+                
+                <span th:if="${category == 'kitchen'}">주방</span>
+	    		<span th:if="${category == 'eco'}">친환경키트</span>
+	    		<span th:if="${category == 'style'}">패션</span>
+	    		  
+	    		  <!-- 
+                    <div class="col mb-3" th:each="products,  iterStat : ${productlists}" th:attr="data-href=@{/products/view?no={no}(no=${products.no})}" th:limit="8">
+	    		   -->
+                    <div class="col mb-3 clickable-row" th:each="products,  iterStat : ${productlists}" th:attr="data-href=@{/products/view?no={no}(no=${products.no})}" th:limit="8">
+                     
+                        <div th:if="${iterStat.index} &lt; 8" class="card h-100">
+                            <!-- Product image-->
+                           <img class= "image-thumbnail" th:src="@{/static/upload/product/} + ${products.image}" style="width: 100%; height: 100%; overflow: hidden; object-fit: cover;">
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder" th:text="${products.name}"></h5>
+                                    <!-- Product price-->
+                                    <h7 class="fw-bolder" th:text="${products.price}"></h7><h7>원</h7>
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">상세보기</a></div>
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">주문하기</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+	 </div>
+	</div>
+</div>	
+
+
+	  
+	<!-- Pagination -->
+	<div class="table-div">
+		<div id="pageBar">
+		  
+		    <!-- 이전 페이지로 -->
+		    <i class="fa-sharp fa-regular fa-angle-left" style="color: #0f5132;"></i>
+		    <a class="a-pagination-move" th:href="@{/products/eco(page=${pageInfo.prevPage})}" th:text="'&lt;'" style="color: #082f1c;"></a>
+
+		    <!-- 10개 페이지 목록 -->
+			<span th:each="pageNumber : ${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+			    <a class="a-pagination current-page" th:if="${pageNumber == pageInfo.currentPage}" disabled="disabled" th:text="${pageNumber}"></a>
+			    <a th:if="${pageNumber >= 1}" class="a-pagination" th:unless="${pageNumber == pageInfo.currentPage}" th:href="@{/products/eco(page=${pageNumber})}" th:text="${pageNumber}"></a>
+			</span>
+		
+		    <!-- 다음 페이지로 -->
+		    <a class="a-pagination-move" th:href="@{/products/eco(page=${pageInfo.nextPage})}" th:text="'&gt;'" style="color: #082f1c;"></a>
+		   
+		</div>
+	</div>
+
+	
+
+	<script> 
+	   // 각 행을 클릭할 때 해당 게시글 view 페이지로 이동
+	   var rows = document.querySelectorAll(".clickable-row");
+	    rows.forEach(function(row) {
+	        row.addEventListener("click", function() {
+	            var href = row.getAttribute("data-href");
+	            if (href) {
+	                window.location.href = href;
+	            }
+	        });
+	    });
+
+	</script>
+	 
+	<!-- 
+		 <script>
+	    // 아이디를 사용하여 요소 선택
+	    var row = document.getElementById("clickable-row");
+	
+	    if (row) {
+	        row.addEventListener("click", function() {
+	            var href = row.getAttribute("data-href");
+	            if (href) {
+	                window.location.href = href;
+	            }
+	        });
+	    }
+	</script>
+		  -->
+
+</div>
+
+</html>

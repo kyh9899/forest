@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.hm.forest.product.model.mapper.ProductMapper">
+	<resultMap id="productResultMap" type="Product" >
+		<id property="no" column="No"/>
+		<result property="name" column="NAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="content" column="CONTENT"/>
+		<result property="color" column="COLOR"/>
+		<result property="amount" column="AMOUNT"/>
+		<result property="sizeSml" column="SIZE_SML"/>
+		<result property="stock" column="STOCK"/>
+		<result property="company" column="COMPANY"/>
+		<result property="discountrate" column="DISCOUNTRATE"/>
+		<result property="status" column="STATUS"/>
+		<result property="image" column="IMAGE"/>
+		<result property="wish" column="WISH"/>
+	</resultMap>
+	
+	
+	<select id="listProduct" parameterType="string" resultMap="productResultMap">
+		SELECT NO,
+		       NAME,
+		       PRICE,
+		       CONTENT,
+		       COLOR,
+		       AMOUNT,
+		       SIZE_SML,
+		       STOCK,
+		       COMPANY,
+		       DISCOUNTRATE,
+		       STATUS,
+		       IMAGE,
+		       WISH
+		 FROM PRODUCT
+</select>
+
+	<select id="selectAll" resultMap="productResultMap">
+		SELECT NO,
+		       NAME,
+		       PRICE,
+		       CONTENT,
+		       COLOR,
+		       AMOUNT,
+		       SIZE_SML,
+		       STOCK,
+		       COMPANY,
+		       DISCOUNTRATE,
+		       STATUS,
+		       IMAGE,
+		       WISH
+		FROM PRODUCT
+		WHERE STATUS = 'Y'
+		ORDER BY NO DESC
+	</select>
+	
+	 <select id="selectProductByNo" parameterType="int" resultMap="productResultMap">
+	 	SELECT NO,
+		       NAME,
+		       PRICE,
+		       CONTENT,
+		       COLOR,
+		       AMOUNT,
+		       SIZE_SML,
+		       STOCK,
+		       COMPANY,
+		       DISCOUNTRATE,
+		       STATUS,
+		       IMAGE,
+		       WISH
+		FROM PRODUCT
+		WHERE STATUS = 'Y' AND NO = #{no}
+	 </select>
+
+	<select id="getProductByNo" parameterType="int" resultMap="productResultMap">
+		SELECT NO,
+		       NAME,
+		       PRICE,
+		       CONTENT,
+		       COLOR,
+		       AMOUNT,
+		       SIZE_SML,
+		       STOCK,
+		       COMPANY,
+		       DISCOUNTRATE,
+		       STATUS,
+		       IMAGE,
+		       WISH
+		FROM PRODUCT
+		WHERE STATUS = 'Y' AND NO = #{no}
+	</select>
+
+
+
+
+
+
+</mapper>

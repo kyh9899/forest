@@ -1,0 +1,325 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--headerFragment 선언-->
+<div th:fragment="headerFragment">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>FORE:ST</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">  
+		
+		<!-- in HEAD -->
+		<link
+		  rel="stylesheet"
+		  href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>	
+  		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
+		<!--css 초기화-->
+  		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">	
+ 	</head>
+ 
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        	<!-- Navigation_left -->
+            <div id="main-div" class="container px-4 px-lg-5">
+             <div id="main-div-left" >
+                <a class="navbar-brand" href="/">FORE:ST</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+             </div>
+
+	
+       		  <!-- Navigation_right -->
+              <div id="main-div-right">
+               
+                <!-- Nav_rignt_top -->
+                <div id="Nav_top">
+				    <div class="collapse navbar-collapse d-flex" id="navbarSupportedContent">
+				        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4" style="font-size: 12px;">
+				            <!-- 로그인 상태에 따라 다르게 표시 -->
+				            <li class="nav-item" th:if="${#request.userPrincipal == null}">
+				                <a class="nav-link" href="/login">로그인</a>
+				            </li>
+				            <li class="nav-item" th:if="${#request.userPrincipal == null}">
+				                <a class="nav-link" href="/enroll">회원가입</a>
+				            </li>
+				            <li class="nav-item" th:if="${#request.userPrincipal != null}">
+				            	<form th:action="@{/logout}" method="post">
+				            	<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+								    <!-- CSRF 토큰 추가 -->
+								    <li class="nav-item" >
+								    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />	
+								    <a class="nav-link-id" sec:authorize="hasRole('USER')" th:text="${loginMember.name + ' 님'}"></a>		
+								    <a class="nav-link-id" sec:authorize="hasRole('ADMIN')" th:text="${'관리자 님'}"></a>					    
+								    <button type="submit" class="nav-link" style="border: none; background-color: transparent; cursor: pointer;">
+								    로그아웃
+								    </button>
+								    </li>
+								    <li class="nav-item">
+								    <a class="nav-link" href="/myPage/orderList" sec:authorize="hasRole('USER')"> 마이페이지</a>
+								    <!-- 
+								    <a class="nav-link" href="/admin/salesMgmt" sec:authorize="hasRole('ADMIN')">관리자페이지</a>
+								    -->
+								    </li>
+				            	</ul>
+						    	</form>
+						   	</li>
+						   	<th:block th:if="${loginMember != null}" sec:authorize="hasRole('USER')" >
+				            <li class="nav-item"><a class="nav-link">&#124;</a></li>
+				            <li class="nav-item"><a class="nav-link" href="/myPage/cart">장바구니</a></li>
+				            </th:block>
+				            </ul>
+				            <th:block th:if="${loginMember != null}" sec:authorize="hasRole('USER')" >
+				            <button th:if="${loginMember != null}" class="btn btn-outline-dark" type="submit">
+				                <i class="bi-cart-fill me-1" style="color:#426D39"></i>
+				                <span class="badge bg-dark text-white ms-1 rounded-pill cartItemCount"></span>
+				            </button>
+				            </th:block>
+				    </div>
+				</div>
+
+                
+           		<!-- Nav_rignt_bottom -->
+                <div class="collapse navbar-collapse nav_menu"  id="navbarSupportedContent" >
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <!--※※ if ~~ 관리자인 경우 메뉴바 전부 보이게, 유저는 4개만 보이게 -->
+                        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        <!--
+                        <li class="nav-item"><a class="nav-link" href="/program">참여하기</a></li>  -->
+                        <li class="nav-item"><a class="nav-link" href="/products/kitchen">제품보기</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/board/notice">소통하기</a></li>
+
+ 
+                        <li class="nav-item dropdown"  sec:authorize="hasRole('ADMIN')">
+						    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">관리자페이지</a>
+						    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+						        <li><a class="dropdown-item" href="/admin/salesMgmt">매출관리</a></li>
+						        <li><a class="dropdown-item" href="/admin/productMgmtList">상품관리</a></li>
+						        <li><hr class="dropdown-divider" /></li>
+						        <li><a class="dropdown-item" href="/admin/memberMgmt">회원관리</a></li>
+						        <li><a class="dropdown-item" href="/admin/boardMgmt">게시판관리</a></li>
+						    </ul>
+						</li>
+                    </ul>
+                    <div class="d-flex">
+					  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+					  <span class="input-group-text border-0" id="search-addon">
+					    <a href="/" ><i class="bi bi-search"></i></a>
+					  </span>
+					</div>
+                </div>
+              </div>
+            </div>
+        </nav>
+        
+        <!-- Header -->
+        <!-- home -->
+        <th:block th:if="${pageName eq 'home'}">
+        <header class="bg-main" >
+            <div class="container">
+                <div class="text-center text-white">
+                  <!-- home 영상 -->
+	               <video class="bg-main-video" autoplay loop muted playsinline>
+		               <source src="/videos/main_video.mp4" type="video/mp4" quality="high">
+		           </video>
+                    <h1 class="display-4 fw-bolder">FORE:ST</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Preserving the beauty of the Earth and brightening the future with FORE:ST</p>
+                 </div>
+               </div>
+         </header>   
+         </th:block>
+                
+         <!-- about -->
+		 <th:block th:if="${pageName eq 'about'}">
+	         <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+			     <div class="container">
+			          <div class="text-center text-white">		         	 
+			              <h3 class="display-6 fw-bolder">ABOUT</h3>
+			          </div>
+			     </div>
+			  </header>
+		 </th:block>
+		 
+         <!-- 참여하기 
+		 <th:block th:if="${pageName eq 'program'}">
+	         <header class="bg-main-header py-5" style="background-image: url('/images/program_pic.png');">
+			     <div class="container">
+			          <div class="text-center text-white">		         	 
+			              <h3 class="display-6 fw-bolder">참여하기</h3>
+			          </div>
+			     </div>
+			  </header>
+			   <div class="sub-menu">
+				  <ul>
+				    <li>
+				      <a href="#">원데이 클래스</a>
+				      <a href="#">참여형 클래스</a>
+				    </li>
+				  </ul>
+				</div>
+		 </th:block>-->
+		 
+         <!-- 제품보기 -->
+		 <th:block th:if="${pageName eq 'kitchen' or pageName eq 'style' or pageName eq 'eco'}">
+	         <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+			     <div class="container">
+			          <div class="text-center text-white">		         	 
+			              <h3 class="display-6 fw-bolder">제품보기</h3>
+			          </div>
+			     </div>
+			  </header>
+		        <div class="sub-menu">
+				  <ul>
+				    <li>
+				      <a th:href="@{/products/kitchen}" th:classappend="${pageName eq 'kitchen'} ? 'active-menu' : ''">주방</a>
+				      <a th:href="@{/products/style}" th:classappend="${pageName eq 'style'} ? 'active-menu' : ''">패션</a>
+				      <a th:href="@{/products/eco}" th:classappend="${pageName eq 'eco'} ? 'active-menu' : ''">친환경 키트</a>
+				    </li>
+				  </ul>
+				</div>
+		 </th:block>
+		 
+         <!-- 소통하기 -->
+		<th:block th:if="${pageName == 'notice' or pageName == 'faq' or pageName == 'community' or pageName == 'act' or pageName == 'boardUpdate' or pageName == 'boardView' or pageName == 'boardWrite'}">
+   		  <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+			     <div class="container">
+			          <div class="text-center text-white">		         	 
+			              <h3 class="display-6 fw-bolder">소통하기</h3>
+			          </div>
+			     </div>
+			  </header>
+			     <div class="sub-menu">
+				  <ul>
+				    <li>
+				    <a th:href="@{/board/notice}" th:classappend="${pageName eq 'notice'} ? 'active-menu' : ''">공지사항</a>
+				   <!--    <a th:href="@{pageName eq 'notice' ? '/board/notice' : '/board/write?type=notice'}" th:href="@{/board/write}"  th:classappend="${pageName eq 'notice'} ? 'active-menu' : ''">공지사항</a>--> 
+				      <a th:href="@{/board/faq}" th:classappend="${pageName eq 'faq'} ? 'active-menu' : ''">자주묻는 질문</a>
+				      <a th:href="@{/board/community}" th:classappend="${pageName eq 'community'} ? 'active-menu' : ''">자유게시판</a>
+				    </li>
+				  </ul>
+				</div>
+		 </th:block>
+		 
+		<!-- 마이페이지 -->
+	       <th:block th:if="${pageName eq 'myPage' or pageName eq 'qna' or pageName eq 'qnaWrite' or pageName eq 'qnaView' or pageName eq 'qnaUpdate' or pageName eq 'orderList'}">
+	            <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+	              <div class="container">
+	                   <div class="text-center text-white">                   
+	                       <h3 class="display-6 fw-bolder">MY FORE:ST</h3>
+	                   </div>
+	              </div>
+	           </header>
+              	<div class="sub-menu">
+				  <ul>
+				    <li>
+				      <a th:href="@{/myPage/orderList}"  th:classappend="${pageName eq 'orderList'} ? 'active-menu' : ''">주문내역</a>
+				      <a th:href="@{/myPage/qna}" th:classappend="${pageName eq 'qna'} ? 'active-menu' : ''">1:1문의하기</a>
+				      <a th:href="@{/myPage/myPage}"  th:classappend="${pageName eq 'myPage'} ? 'active-menu' : ''">개인정보 수정</a>
+				    </li>
+				  </ul>
+				</div>
+	       </th:block>
+	       
+	       <!-- 관리자 페이지 -->
+	       <th:block th:if="${pageName eq 'salesMgmt' or pageName eq 'programMgmt' or 
+	       					  pageName eq 'productMgmt' or pageName eq 'boardMgmt' or 
+	       					  pageName eq 'memberMgmt' or pageName eq 'productMgmtList'}">
+	            <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+	              <div class="container">
+	                   <div class="text-center text-white">                   
+	                       <h3 class="display-6 fw-bolder">FORE:ST</h3>
+	                   </div>
+	              </div>
+	           </header>
+              	<div class="sub-menu">
+				  <ul>
+				    <li>
+				      <a th:href="@{/admin/salesMgmt}" th:classappend="${pageName eq 'salesMgmt'} ? 'active-menu' : ''">매출관리</a>
+				      <a th:href="@{/admin/productMgmtList}" th:classappend="${pageName eq 'productMgmtList'} ? 'active-menu' : ''">제품관리</a>
+				      <a th:href="@{/admin/memberMgmt}" th:classappend="${pageName eq 'memberMgmt'} ? 'active-menu' : ''">회원관리</a>
+				      <a th:href="@{/admin/boardMgmt}" th:classappend="${pageName eq 'boardMgmt'} ? 'active-menu' : ''">게시판관리</a>
+				    </li>
+				  </ul>
+				</div>
+	       </th:block>
+       
+       <!-- 기타페이지_공통 -->
+       <th:block th:unless="${pageName eq 'home' or pageName eq 'about' or pageName eq 'program' or 
+       	 					  pageName eq 'kitchen' or pageName eq 'style' or pageName eq 'eco' or 
+       	 					  pageName eq 'board' or pageName eq 'myPage' or 
+       	 					  pageName eq 'salesMgmt' or pageName eq 'programMgmt' or pageName eq 'productMgmt' or 
+       	 					  pageName eq 'boardMgmt' or pageName eq 'memberMgmt' or pageName eq 'notice' or 
+       	 					  pageName eq 'faq' or pageName eq 'community' or pageName eq 'act' or pageName eq 'qna'or
+       	 					  pageName eq 'boardWrite' or pageName eq 'boardUpdate' or pageName eq 'boardView' or
+       	 					  pageName eq 'qnaWrite' or pageName eq 'qnaUpdate' or pageName eq 'qnaView' or pageName eq 'orderList' or 
+       	 					  pageName eq 'productMgmtList'
+       	 					  }">
+            <header class="bg-main-header py-5" style="background-image: url('/images/common_pic.png');">
+              <div class="container">
+                   <div class="text-center text-white">                   
+                       <h3 class="display-6 fw-bolder">FORE:ST</h3>
+                   </div>
+              </div>
+           </header>
+       </th:block>
+       <!--  <p class="lead fw-normal text-white-50 mb-0">Preserving the beauty of the Earth and brightening the future with FOREST</p>
+       -->
+	
+        
+       
+        
+        
+<!-- main_video 자동 재생 -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var video = document.getElementById('video-background');
+
+  // 비디오가 재생될 때 반복 재생
+  video.addEventListener('ended', function () {
+    video.currentTime = 0;
+    video.play(); 
+  });
+});
+</script>
+    
+    
+<script>
+$(document).ready(function () {
+    updateCartCount();
+});
+
+// 장바구니 수 업데이트하는 함수
+function updateCartCount() {
+    $.ajax({
+        url: '/myPage/cart/count',
+        type: 'GET',
+        dataType: 'json',
+        success: function (obj) {
+            // 장바구니 제품 목록 수 가져와서 변수에 저장
+            var cartCount = obj.listCount; 
+            
+            $('.cartItemCount').text(cartCount); // 장바구니 수 표시(업데이트)
+        },
+        error: function (error) {
+            console.error('장바구니 수를 가져오는 중 오류 발생: ', error);
+        }
+    });
+}
+</script>
+
+
+</div>
+</html>

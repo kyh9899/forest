@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>common</title>
+</head>
+<body>
+
+<script th:inline="javascript">
+	// 알림 메세지를 띄움	
+	alert([[${msg}]]);
+	
+
+
+	// 페이지 이동
+    location.replace([[${location}]]);
+</script>
+
+
+
+
+
+
+</body>
+</html>

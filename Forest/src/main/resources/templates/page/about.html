@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='about'"></th:block>      
+<!-- about.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+
+<style>
+
+	#contents {
+	    align: center;
+	    text-align: center;    
+	    line-height: 40px;
+	}
+	
+	#contents > p {
+	    font-weight: 500;
+	}
+	
+	span{
+	    font-weight: bold;
+	}
+	
+	.sp {
+	    color: rgb(182, 182, 182);
+	}
+	
+	
+	.intro_common{
+	    width: 100%;
+	    font-size: 26px;
+	}
+	
+	#intro_first {
+	    background-color: #F3F0F0; 
+	    padding:15px 0;
+	    margin: 50px 0 70px 0;
+	}
+	
+	#intro_tb {
+	    font-size: 26px;
+	}
+	
+	#intro_tb td {
+	    padding: 0 20px;
+	}
+	
+	#intro_act {
+	    background-color: #e3f4e9; 
+	    padding:20px 0 50px 0;
+	    margin: 70px 0 70px 0;
+	    font-size: 28px;
+	}
+
+	.center-table {
+        text-align: center;
+	    margin: 0 auto;
+    }
+
+    .CTT {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .CTT td {
+        padding-right: 15px;
+        width: 25%; /* 네 개의 셀을 동일한 너비로 설정 */
+    }
+
+
+
+</style>
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/about.css}" >-->
+</th:block>
+<!-- about.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/about.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+  <div id="contents">
+    <div id="intro_first" class="intro_common">
+        <h4 class="LSh4" style="margin-left: 10px;"><strong>지구를 지키는 LIFE STYLE</strong></h4>
+         <p class="LSp" style="margin-left: 10px;"><span style="color: rgb(5, 71, 5); font-weight: 600;">FORE:ST</span>는 쓰임을 잃고 버려지는 물건의 가치를 발견하여 
+             <br>
+             지속가능한 세상을 추구하는 업사이클 라이프스타일 플랫폼입니다.
+         </p>
+     </div>
+ 
+ 
+     <div id="intro_name" class="intro_common">
+         <h2 class="INh" style="margin-left: 10px; color: #0f5132; font-weight: 600;">FORE:ST</h2>
+         <p class="INp" style="margin-left: 10px;"><span style="color: rgb(5, 71, 5); font:bold;">FORE:ST</span>는 자연과 함께하는 삶을 위한 4가지 행동이 사회에 널리 퍼지고, 울창한 울림으로 되돌아오길  희망합니다.</p>
+         
+         <table align="center" id="intro_tb" style="display: flex; justify-content: center;">
+             <tr>
+                 <td><img src="./images/intro_pic1.png" style="width: 480px; height: 300px; margin-left: 10px;"></td>
+                 <td align="left" style="vertical-align: top; padding-top: 40px; line-height: 40px;">
+                    <h2 style="margin-left: 10px;">FORE<span class="sp">:ST</span></h2>    
+                     <p class="foact" style="margin-left: 10px;"> FOUR RE_ACT의 약자로,<br>
+                         포레스트가 추구하는 자원순환<br>
+                         라이프스타일의 4가지 핵심 가치를 대표합니다.
+                     </p>
+                 </td>
+             </tr>
+             <tr>
+                 <td align="right" style="vertical-align: top; padding-top: 40px; line-height: 40px; margin-left: 10px;">
+                     <h2 style="margin-right: 10px;"><span class="sp">FORE</span>:ST</h2>    
+                     <p class="fostyle" style="margin-right: 10px;"> STYLE의 약자로,<br>
+                         우리의 라이프 스타일은 곧 4가지 핵심가지로<br>
+                         완성된다는 의미를 담고 있습니다.
+                     </p>
+                 </td>
+                 <td><img src="./images/intro_pic2.png" style="width: 480px; height: 300px;"></td>
+             </tr>
+         </table>
+     </div>
+ 
+     <br> 
+ 
+     <div id="intro_act" class="intro_common" style="align-items: center; display: flex; flex-direction: column;">
+         <h2 class="IA" style="margin-left: 10px;"><span style="color: #426D39;">FORE:ST</span>의 <span>4가지 실천</span></h2>
+         <p class="IAp" style="margin-left: 10px;">FOUR RE_ACT : OUR LIFE STYLE</p>
+         
+         <div class="center-table">
+             <table class="CTT" style="margin-left: 10px;">
+                 <tr>
+                     <td style="padding-right: 15px;"><img src="./images/intro_act1.png"></td>
+                     <td style="padding-right: 15px;"><img src="./images/intro_act2.png"></td>
+                     <td style="padding-right: 15px;"><img src="./images/intro_act3.png"></td>
+                     <td><img src="./images/intro_act4.png"></td>
+                 </tr>
+             </table>
+         </div>
+     </div>
+ 
+     <br> 
+ 
+     <div class="center-table">
+         <img src="./images/intro_pic3.png"  style="margin-left: 70px;">
+         <img src="./images/intro_pic4.png" style="margin-left: 115px;">
+     </div>
+ 
+     <div class="center-table" style="margin:100px 115px;">
+         <img src="./images/intro_pic5.png">
+     </div>
+     
+ </div>
+</div>
+</html>

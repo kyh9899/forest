@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='boitherm'"></th:block>      
+<!-- aesop.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+    <!-- ex)   <link rel="stylesheet" th:href="@{/css/page/aesop.css}" >-->
+</th:block>
+<!-- aesop.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- ex)  <script th:src="@{/js/page/aesop.js}"></script>-->
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+
+
+
+<style>
+    #contents {
+        align:center;     
+        margin: 0 auto;
+        text-align: center;
+    }
+    #cmpg_intro{
+        margin: 50px 0;
+    }
+    #cmpg_intro td {
+        padding: 0 20px;
+    }
+
+  	/*   
+     div {
+        margin: 150px 0;
+    }
+    */
+
+    .cmpg_content > h3 , .cmpg_content td > h3{
+        color: darkgreen;
+        font-size: 28px;
+    }
+    .cmpg_content table {
+        margin: 0 auto;
+
+    }
+
+    boitherm > span {
+        font-weight: 500;
+    }
+    
+    boitherm > p {
+        font-size: 22px;
+    }
+
+    boitherm > p span {
+        font-weight: bold;
+    }
+
+
+</style>
+
+<div id="contents">
+    <div id="cmpg_intro" class="cmpg_content">
+        <table>
+            <tr>
+                <td id="boitherm"><img src="../images/biotherm.png" style="width: 500px; height: 500px;"></td>
+                <td style="text-align: left; vertical-align: top; padding-top: 20px; line-height: 40px;">
+                    <h3 style="font-size: 28px; color: darkgreen;">캠페인 정보</h3>
+			          <p>비오템은 지속 가능한 순환 경제를 적극적으로 개발하며, 우리 해양을 보전하기 위해 지속적으로 노력하고 있습니다.</p><br>
+					  <p>더불어 새로운 재활용 기술 사용에 앞장서며, <br><br>
+					   최첨단 생명과학 기술을 적용해 물과 바다 생물에 대한 해양 관련 주제를 연구하며 해양 생태계 보전에 앞장서고 있습니다.</p><br>
+                </td>
+            </tr>
+        </table>
+    </div>    
+
+    <div class="cmpg_content">
+        <h3>수거 품목</h3>
+        <p><strong>‘비오템 워터러버’</strong> 캠페인의 수거품목은 오직 비오템 화장품 공병만 가능합니다.
+			타 브랜드 제품은 수거 및 재활용 불가능하니 유의해 주세요.</p>
+    </div>
+
+    <div class="cmpg_content">
+        <h3>오프라인 수거 방법</h3>
+        <p><img src="../images/aesop2.png" alt=""></p>      
+        <p>1. 다 쓴 비오템 화장품 공병을 모아 비오템 매장에 방문하여 주세요.<br />
+		   2.&nbsp;비오템 매장&nbsp;내 테라사이클 수거함에&nbsp;반납해 주세요.</p>      
+    </div>
+    
+    <div class="cmpg_content">  
+        <table>
+            <tr>
+                <td>
+                    <h3 style="text-align: center;">비오템 화장품 공병 재활용 캠페인에 동참하는 방법</h3>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; line-height: 40px;">
+                    <p>
+                    <span>Step1</span>  제품을 모두 다 사용했는지 확인해 주세요.<br/>
+                    <span>Step2</span>  다 사용한 공병은 깨끗이 세척해 주세요.<br>
+                    <span>Step3</span>  세척한 공병을 물기 없이 건조해 주세요.<br><br>
+                    
+                    *온-오프라인 상관없이 전달해 주신 화장품 공병은 비오템 워터러버 스탬프로 적립해 드립니다.
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+   
+</div>
+</html>

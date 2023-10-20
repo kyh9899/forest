@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <th:block th:with="pageName='orderList'"></th:block>
+    <!-- myPage.html 고유 CSS 추가 -->
+    <th:block layout:fragment="css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </th:block>
+</head>
+<body>
+    <!-- Content -->
+    <div layout:fragment="content">
+	 <div id="content-background">
+	
+	  <div class="table-div">
+	    <table class="table table pull-right" style="margin-top: 50px;" >
+		  <thead>	
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="6" class="th-custom-style" style="border-bottom-color: white; padding-bottom: 0px;
+				  color: #082f1c;">주문 내역<br>
+			  </th>
+			 </tr>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="6" class="th-custom-style" style="border-bottom-width: 3px;
+				  border-bottom-color: #082f1c; font-size: 18px;
+				  color: #082f1c;">회원님의 지난 1년 간의 주문 내역입니다.<br>전체 기간에 대한 주문 내역 조회는 1:1 문의 게시판을 이용해 주시기 바랍니다.
+			  </th>
+			 </tr>
+	 	  </thead>
+
+		 		  <tbody>
+		  	    <tr style="text-align: center;">
+		  	    	<th colspan="2" style="width:50%;">상품정보</th>
+					<th>주문옵션</th>
+					<th>주문수량</th>
+					<th>주문일자</th>
+					<th>주문금액</th>
+				</tr>
+				<!-- 주문서에 상품이 없는 경우 -->
+				<th:block th:if="${#lists.isEmpty(myPageOrderList)}">
+				<tr class="tb-style-none">
+			        <td colspan="7" style="text-align: center; height: 200px; vertical-align: middle;">결제할 상품이 없습니다.<br> 원하는 상품을 장바구니에 담아보세요!</td>
+			    </tr>
+			    </th:block>
+			    <!-- 주문서에 상품이 있는 경우 -->
+			    <th:block th:if="${not #lists.isEmpty(myPageOrderList)}">
+				<tr class="viewPage tb-style-none" style="text-align: center;" th:each="order : ${myPageOrderList}">
+					<td style="width:10%;"><img th:src="@{/static/upload/product/} + ${order.image}" style="width: 100px; height: 100px; overflow: hidden; object-fit: cover;"></td>
+			        <td>
+				        <div style="display: flex; position: absolute; flex-direction: column; align-items: flex-start;">
+				        	<div th:text="${order.category}" style="font-weight: bold; font-size: 13px; margin-top: 5px;"></div>
+				        	<div th:text="${order.name}" style="font-weight: bold; font-size: 15px; margin-top: 5px;"></div>
+				        	<div>			        	
+				        		<a th:text="'판매가 : ' + ${order.price} + '원 '" style="font-weight: bold; font-size: 12px; margin-top: 40px; margin-right: 5px;"></a>
+			        		</div>
+				        </div>
+			        </td>
+			        <td>
+			        	<div th:text="${order.color}" style="font-weight: bold; font-size: 15px;"></div>
+			        	<div th:text="${order.size}" style="font-weight: bold;  font-size: 13px;"></div>
+			        </td>
+			        <td>
+			       		<span th:text="  ${order.quantity} + '개  '"></span>
+					    <!-- <i id="minusQuantity" class="fa-solid fa-square-minus" style="color: #c9c9c9;"></i>
+					    <span th:text="  ${cart.quantity} + '개  '"></span>
+					    <i id="plusQuantity" class="fa-solid fa-square-plus" style="color: #c9c9c9;"></i>
+					     -->
+					</td>
+			        <td th:text="${#dates.format(order.paymentDate, 'yyyy-MM-dd')}"></td>
+			        <td th:text="${order.price} * ${order.quantity} + '원'" ></td>
+			    </tr>
+				</th:block>
+			    
+			    <!-- 메인버튼 -->
+				<tr style="text-align: center;">
+					<td colspan="7" style="border-color: white;">
+				        <a class="btn btn-outline-secondary" th:href="@{/}">메인으로</a>
+					</td>
+				</tr>
+		  </tbody>
+	  </table>
+	</div>
+   	</div>
+</div>
+</body>
+</html>

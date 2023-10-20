@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+      
+<!-- csrf 토큰을 비동기통신으로 넘기기 위한 설정 -->
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}">
+<meta th:name="_csrf" th:content="${_csrf.token}">
+
+<th:block th:with="pageName='cart'"></th:block>      
+<th:block layout:fragment="css">
+
+<style>
+	td > i {
+		cursor: pointer;
+	}
+	
+	.txt-manual {
+		text-align: center;
+	}
+</style>
+
+</th:block>
+<!-- cart.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- 이모티콘 -->
+    <script src="https://kit.fontawesome.com/74362490cf.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+ <div class="detail_cont info-con">
+            <div class="detail_explain_box">
+                <div class="image-manual"><!-- 이미지 --></div>
+                <div class="txt-manual">
+                    <img src="https://imgs.softwrap.co.kr/neogift/img_model/img_content/58709(2).jpg" style="width: 1050px;">
+                </div>
+            <div class="dtib" style="background-color: #CCCCCC; padding: 15px;">
+            <h3>상품 상세정보</h3>
+            <div class="detail_info_box">
+                <div class="datail_table">
+                    <table class="left_table_type">
+                        <colgroup>
+                            <col />
+                            <col />
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th style="width:10%">인쇄</th>
+                            <td style="width:30%">UV DTF 필름 / 전사인쇄 / UV인쇄</td>
+                            <th style="width:10%">규격</th>
+                            <td style="width:30%">항균파우치 : 190x270 / 대나무 칫솔치약세트 &amp; 린넨파우치 / 재생노트, 세나토 볼펜 / 유리빨대 4종세트</td>
+                        </tr>
+                        <tr>
+                            <th style="width:10%">재질</th>
+                            <td style="width:30%">상세이미지 참조</td>
+                            <th style="width:10%">색상</th>
+                            <td style="width:30%">상세이미지 참조</td>
+                        </tr>
+                        <tr>
+                            <th style="width:10%">제작기간</th>
+                            <td style="width:30%">~최대 7일(수량에 따라 상이)</td>
+                            <th style="width:10%">포장</th>
+                            <td style="width:30%">해당사항 없음</td>
+                        </tr>
+                        <tr>
+                            <th style="width:10%">소량주문</th>
+                            <td style="width:30%">★ 30개 미만 주문시 별도 문의 ★</td>
+                            <th style="width:10%">원산지</th>
+                            <td style="width:30%">상세이미지 참조</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+            <!-- //detail_info_box -->
+            </div>
+            <!-- //detail_explain_box -->
+        
+        </div>
+        <!-- //detail_cont -->
+        
+    </div>

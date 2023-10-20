@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hm.forest.payment.model.mapper.PaymentMapper">
+	
+	
+	<resultMap id="paymentResultMap" type="Payment" >
+		<id property="no" column="NO"/>
+		<result property="memberNo" column="MEMBER_NO"/>
+		<result property="totalPrice" column="TOTAL_PRICE"/>
+		<result property="paymentMethod" column="PAYMENT_METHOD"/>
+		<result property="paymentDate" column="PAYMENT_DATE]"/>
+		<result property="cancelDate" column="CANCEL_DATE"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<resultMap id="paymentDetailResultMap" type="Payment" extends="paymentResultMap">
+		<!-- columnPrefix R_ 붙은 컬럼들은 resultMap으로 매핑작업하고, list에 담아서 Board객체의 replies에 담아서 처리한다. -->
+		<collection property="orderLists" ofType="Order" javaType="arraylist" columnPrefix="O_" resultMap="orderResultMap" column="NO"/>
+		<collection property="delivery" ofType="Delivery" javaType="Delivery" columnPrefix="D_" resultMap="deliveryResultMap" column="NO"/>
+	</resultMap>
+	
+	<resultMap id="orderResultMap" type="Order">
+		<id property="no" column="NO"/>
+		<result property="paymentNo" column="PAYMENT_NO"/>
+		<result property="cartNo" column="CART_NO"/>
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="detailNo" column="DETAIL_NO"/>
+		<result property="quantity" column="QUANTITY"/>
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<resultMap id="deliveryResultMap" type="Delivery">
+		<id property="no" column="NO"/>
+		<result property="paymentNo" column="PAYMENT_NO"/>
+		<result property="recipient" column="RECIPIENT"/>
+		<result property="phone" column="PHONE"/>
+		<result property="pcode" column="PCODE"/>
+		<result property="address1" column="ADDRESS1"/>
+		<result property="address2" column="ADDRESS2"/>
+		<result property="memo" column="MEMO"/>
+		<result property="status" column="STATUS"/>
+		<result property="deliveryDate" column="DELIVERY_DATE"/>
+		<result property="returnDate" column="RETURN_DATE"/>
+	</resultMap>
+	
+	<resultMap id="cartResultMap" type="Cart">
+		<id property="no" column="NO"/>
+		<result property="memberNo" column="MB_NO"/>
+		<result property="productNo" column="PD_NO"/>
+		<result property="detailNo" column="DETAIL_NO"/>
+		<result property="color" column="COLOR"/>
+		<result property="size" column="SIZE_SML"/>
+		<result property="stock" column="STOCK"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="name" column="NAME"/>
+		<result property="price" column="PRICE"/>
+		<result property="discountrate" column="DISCOUNTRATE"/>
+		<result property="image" column="IMAGE"/>
+		<result property="status" column="STATUS"/>
+		<result property="quantity" column="QUANTITY"/>
+		<result property="totalPrice" column="TOTAL_PRICE"/>
+		<result property="paymentDate" column="PAYMENT_DATE"/>
+	</resultMap>
+	
+	<!-- 결제하기 클릭 시 입력되는 정보들 -->
+	<!-- 1. 결제 정보 설정(입력) -->
+	<insert id="insertPayment">	
+	<selectKey resultType="_int" keyProperty="no" order="BEFORE">
+		SELECT SEQ_PAYMENT_NO.NEXTVAL FROM DUAL
+	</selectKey>
+		INSERT INTO PAYMENT(
+		    	NO,
+		    	MEMBER_NO,
+		    	TOTAL_PRICE
+		) VALUES(
+		    	#{no},
+		    	#{memberNo},
+				#{totalPrice}
+		)	
+	</insert>	
+	
+	<!-- 2. 해당 결제 건에 대한 주문 정보 등록  -->
+	<insert id="insertOrdersByPaymentNo" parameterType="Order">
+	    <selectKey resultType="_int" keyProperty="no" order="BEFORE">
+	        SELECT SEQ_ORDER_NO.NEXTVAL FROM DUAL
+	    </selectKey>
+        INSERT INTO ORDERINFO (
+        	NO,
+        	PAYMENT_NO,
+        	CART_NO,
+            PRODUCT_NO,
+            DETAIL_NO,
+            QUANTITY
+        ) VALUES (
+        	#{no},
+        	#{paymentNo},
+        	#{cartNo},
+            #{productNo},
+            #{detailNo},
+            #{quantity}
+        )
+	</insert>
+	
+	<!-- 3. 해당 결제 건에 대한 배송 정보 등록  -->
+	<insert id="insertDeliveryByPaymentNo" parameterType="Delivery">
+		<selectKey resultType="_int" keyProperty="no" order="BEFORE">
+			SELECT SEQ_DELIVERY_NO.NEXTVAL FROM DUAL
+		</selectKey>
+	        INSERT INTO DELIVERY (
+	            NO,
+	            PAYMENT_NO,
+	            RECIPIENT,
+	            PHONE,
+	            PCODE,
+	            ADDRESS1,
+	            ADDRESS2,
+	            MEMO
+	        ) VALUES (
+	            #{no},
+	            #{paymentNo},
+	            #{delivery.recipient},
+	            #{delivery.phone},
+	            #{delivery.pcode},
+	            #{delivery.address1},
+	            #{delivery.address2},
+	            #{delivery.memo}
+	        )
+	</insert>
+	
+	<!-- 결제 성공 시 -->
+	<!-- 1. 재고 변경_주문수량 조회 -->
+	<select id="getOrderQuantityByNo" parameterType="_int" resultMap="orderResultMap">
+		SELECT PRODUCT_NO, 
+			   CART_NO,
+			   DETAIL_NO, 
+			   QUANTITY
+		FROM ORDERINFO
+		WHERE PAYMENT_NO = #{no}
+	</select>
+	
+	<!-- 1. 재고 변경_재고수량 감소 -->
+	<update id="updateStockByOrderQuantity" parameterType="Order">
+		UPDATE DETAIL
+		SET STOCK = STOCK - #{quantity}
+		WHERE NO = #{detailNo} AND PRODUCT_NO = #{productNo}
+	</update>
+	
+	<!-- 2. 해당 결제 건의 상태값 변경(N -> Y) -->
+	<update id="updatePaymentStatusByNo" parameterType="Payment">
+		UPDATE PAYMENT
+		SET STATUS = #{status}
+		WHERE NO = #{no} AND MEMBER_NO = #{memberNo}
+	</update>
+
+	<!-- 3. 장바구니 상품 삭제 -->
+	<delete id="deleteCartByCartNo" parameterType="_int">
+	   DELETE FROM CART
+	   WHERE NO IN #{cartNo} AND MB_NO = #{memberNo}
+	</delete>
+	
+	<!-- 4. 결제 내역 조회_주문 내역-->
+	<select id="getOrderListsByNo" parameterType="_int" resultMap="cartResultMap">
+		SELECT PD.IMAGE,
+		       PD.CATEGORY,
+		       PD.NAME,
+		       PD.PRICE,
+		       D.COLOR,
+		       D.SIZE_SML,
+		       O.QUANTITY,
+		       PM.PAYMENT_DATE
+		FROM PAYMENT PM 
+		JOIN ORDERINFO O ON (O.PAYMENT_NO = PM.NO)
+		JOIN PRODUCT PD ON (O.PRODUCT_NO = PD.NO)
+		JOIN DETAIL D ON (O.DETAIL_NO = D.NO)
+		WHERE PM.STATUS = 'Y' AND PM.NO = #{no} AND PM.MEMBER_NO = #{memberNo}
+	</select>
+	
+	<!-- 4. 결제 내역 조회_배송 내역-->
+	<select id="getDeliveryByNo" parameterType="_int" resultMap="deliveryResultMap">
+		SELECT PAYMENT_NO,
+		       RECIPIENT,
+		       PHONE,
+		       PCODE,
+		       ADDRESS1,
+		       ADDRESS2,
+		       MEMO,
+		       DELIVERY_DATE,
+		       RETURN_DATE,
+		       STATUS
+		FROM DELIVERY
+		WHERE PAYMENT_NO = #{no}	
+	</select>
+
+	<!-- 나의 주문내역 조회 -->
+	<select id="getMyOrderListsByNo"  parameterType="_int" resultMap="cartResultMap"> 
+		SELECT PM.NO,
+		       PD.IMAGE,
+		       PD.CATEGORY,
+		       PD.NAME,
+		       PD.PRICE,
+		       D.COLOR,
+		       D.SIZE_SML,
+		       O.QUANTITY,
+		       PM.TOTAL_PRICE,
+		       PM.PAYMENT_DATE
+		FROM PAYMENT PM
+		JOIN ORDERINFO O ON (O.PAYMENT_NO = PM.NO)
+		JOIN PRODUCT PD ON (O.PRODUCT_NO = PD.NO)
+		JOIN DETAIL D ON (O.DETAIL_NO = D.NO)
+		JOIN DELIVERY DV ON (DV.PAYMENT_NO = PM.NO)
+		WHERE PM.MEMBER_NO = #{memberNo} AND PM.STATUS = 'Y' AND PM.PAYMENT_DATE >= (SYSDATE - 364)
+		ORDER BY PM.NO DESC
+		</select>
+	
+
+</mapper>

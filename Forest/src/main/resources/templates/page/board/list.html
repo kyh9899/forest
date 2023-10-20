@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<th:block th:with="pageName='notice'"></th:block>      
+<!-- notice.html 고유 CSS 추가 -->
+<th:block layout:fragment="css"></th:block>
+<!-- notice.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script"></th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+  <div class="table-div">
+	  <table class="table table table-hover">
+		  <thead>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="5" class="th-custom-style" style="border-bottom-width: 3px; 
+				  border-bottom-color: #082f1c;
+				  color: #082f1c;">
+				  <span th:if="${type == 'notice'}">공지사항</span>
+	    		  <span th:if="${type == 'community'}">자유게시판</span>
+	    		  <button class="btn btn-sm btn-outline-secondary" type="button" th:if="${type == 'notice'}" onclick="redirectToWrite('notice')">글쓰기</button>
+
+				<!-- 자유게시판 글쓰기 버튼 -->
+				<button class="btn btn-sm btn-outline-secondary" type="button" th:if="${type == 'community'}" onclick="redirectToWrite('community')">글쓰기</button>
+</th>
+		    </tr>
+		  </thead>
+		  
+		  <tbody>
+		  	    <tr style="text-align: center;">
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>조회</th>
+				</tr>
+				<tr class="viewPage" style="text-align: center;" th:each="board : ${boardLists}"  th:attr="data-href=@{/board/view?no={no}(no=${board.no})}">
+			        <td th:text="${board.rowNum}"></td>
+			        <td th:text="${board.title}" style="text-align:left; width:60%;"></td>
+			        <td th:text="${board.writerId}"></td>
+			        <td th:text="${#dates.format(board.createDate, 'yyyy-MM-dd')}"></td>
+			        <td th:text="${board.readCount}"></td>
+			    </tr>
+
+		  </tbody>
+	  </table>
+	</div>
+	
+
+				  
+	<!-- Pagination -->
+	<div class="table-div">
+		<div id="pageBar">
+		  
+		    <!-- 이전 페이지로 -->
+		    <i class="fa-sharp fa-regular fa-angle-left" style="color: #0f5132;"></i>
+		    <a class="a-pagination-move" th:href="@{/board/notice(page=${pageInfo.prevPage})}" th:text="'&lt;'" style="color: #082f1c;"></a>
+
+		    <!-- 10개 페이지 목록 -->
+			<span th:each="pageNumber : ${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+			    <a class="a-pagination current-page" th:if="${pageNumber == pageInfo.currentPage}" disabled="disabled" th:text="${pageNumber}"></a>
+			    <a class="a-pagination" th:unless="${pageNumber == pageInfo.currentPage}" th:href="@{/board/notice(page=${pageNumber})}" th:text="${pageNumber}"></a>
+			</span>
+		
+		    <!-- 다음 페이지로 -->
+		    <a class="a-pagination-move" th:href="@{/board/notice(page=${pageInfo.nextPage})}" th:text="'&gt;'" style="color: #082f1c;"></a>
+		   
+		</div>
+	</div>
+
+	
+	
+	<script>
+		   // 각 행을 클릭할 때 해당 게시글 view 페이지로 이동
+		    var rows = document.querySelectorAll(".viewPage");
+		    rows.forEach(function(row) {
+		        row.addEventListener("click", function() {
+		            var href = row.getAttribute("data-href");
+		            if (href) {
+		                window.location.href = href;
+		            }
+		        });
+		    });
+		  
+		  // write페이지로 이동 시 게시판 type값을 파라미터 전달
+		  function redirectToWrite(type) {
+		   window.location.href = '/board/write?type=' + type;
+		  };
+	</script>
+</div>
+
+</html>

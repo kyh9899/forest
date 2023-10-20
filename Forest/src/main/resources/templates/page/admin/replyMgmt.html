@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block th:with="pageName='replyMgmt'"></th:block>      
+<!-- boardMgmt.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</th:block>
+<!-- boardMgmt.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<!-- Content -->
+<div layout:fragment="content">
+  <div class="table-div">
+	  <table class="table table table-hover pull-right">
+	  	<form class="container" action="/admin/replyMgmt" method="GET">
+		  <thead>
+		    <tr class="border-bottom" >
+		      <th scope="col" colspan="3" class="th-custom-style" style="border-bottom-width: 3px; 
+				  border-bottom-color: #082f1c;
+				  color: #082f1c;">댓글 조회
+			  </th>
+			  <!-- 검색 바 -->
+			   <td style="padding:8px 2px 8px 8px; border-bottom-width: 3px; 
+				  border-bottom-color: #082f1c;
+				  color: #082f1c;">
+				   <select class="searchType" name="searchType" th:value="${searchType}" >
+	                     <option value=" ">선택</option>
+	                     <option value="writer">작성자</option>
+	                     <option value="title">게시글</option>
+	               </select>
+               </td>
+               <td style="padding:8px 2px; border-bottom-width: 3px; 
+				  border-bottom-color: #082f1c;
+				  color: #082f1c;">
+				  <button type="submit" class="btn btn-sm-search btn-search">검색</button>
+			  </td>
+		    </tr>
+	 	  </thead>
+	   </form>
+		  
+		  <tbody>
+		  	    <tr style="text-align: center;">
+					<th>번호</th>
+					<th style="width:20%;">게시글 제목</th>
+					<th>내용</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>상태</th>
+				</tr>
+			    
+				<tr class="clickable-row" style="text-align: center;" th:each="reply : ${replyLists}"  th:attr="data-href=@{/admin/replyMgmt?no={no}(no=${reply.no})}">
+			        <td th:text="${reply.boardNo}" style="text-align:left; width:55%;"></td>
+			        <td th:text="${reply.writerNo}"></td>
+			        <td th:text="${reply.writerId}"></td>
+			        <td th:text="${#dates.format(reply.createDate, 'yy-MM-dd')}"></td>
+			        <td th:text="${#dates.format(reply.modifyDate, 'yy-MM-dd')}"></td>
+			        <td th:text="${reply.status}" style="width:10%;"></td>
+			        
+			        <td style="padding-left: 20px;">
+		            <form action="/admin/updatboardstatus" method="post">
+		            	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />	
+		                <input type="hidden" name="no" th:value="${reply.no}">
+		                <button style="background-color: #082f1c; color: white; font-size: 15px; border-radius: 5px; margin-bottom: 10px; border: none; padding: 5px 10px;" type="submit">삭제</button>
+		            </form>
+		        	</td>
+		                
+		       	    <td style="padding-left: 10px;">
+            		<form action="/admin/activateboard" method="post">
+            			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />	
+            	    	<input type="hidden" name="no" th:value="${reply.no}">
+                		<button style="background-color: #082f1c; color: white; font-size: 15px; border-radius: 5px; margin-bottom: 10px; border: none; padding: 5px 10px;" type="submit">계시</button>
+            		</form>
+       				</td>
+			    </tr>
+		  </tbody>
+	  </table>
+	</div>
+	
+
+				  
+	<!-- Pagination -->
+	<div class="table-div" style="margin-top: 100px;">
+		<div id="pageBar">
+		  
+		    <!-- 이전 페이지로 -->
+		    <a class="a-pagination-move" th:href="@{/admin/replyMgmt(page=${pageInfo.prevPage} ,searchType=${searchType})}" th:text="'&lt;'" style="color: #082f1c;"></a>
+
+		    <!-- 10개 페이지 목록 -->
+			<span th:each="pageNumber : ${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+			    <a class="a-pagination current-page" th:if="${pageNumber == pageInfo.currentPage}" disabled="disabled" th:text="${pageNumber}"></a>
+			    <a class="a-pagination" th:unless="${pageNumber == pageInfo.currentPage}" th:href="@{/admin/replyMgmt(searchType=${searchType},page=${pageNumber})}" th:text="${pageNumber}"></a>
+			</span>
+		
+		    <!-- 다음 페이지로 -->
+		    <a class="a-pagination-move" th:href="@{/admin/replyMgmt(page=${pageInfo.nextPage}, searchType=${searchType})}" th:text="'&gt;'" style="color: #082f1c;"></a>
+
+		   
+		</div>
+	</div>
+</div>
+</html>
