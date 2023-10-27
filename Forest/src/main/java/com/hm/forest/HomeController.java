@@ -149,6 +149,24 @@ public class HomeController {
 		return modelAndView;
 	}
 	
+	@GetMapping("/naverLogin")
+	public ModelAndView naverLogin (ModelAndView modelAndView) {
+		
+		modelAndView.addObject("pageName", "naverLogin");
+		modelAndView.setViewName("page/naverLogin");
+		
+		return modelAndView;
+	}
+	
+	@GetMapping("/kakaoLogin")
+	public ModelAndView kakaoLogin (ModelAndView modelAndView) {
+		
+		modelAndView.addObject("pageName", "kakaoLogin");
+		modelAndView.setViewName("page/kakaoLogin");
+		
+		return modelAndView;
+	}
+	
 	// 회원가입 페이지로 이동 
 	@GetMapping("/enroll")
 	public ModelAndView enroll (ModelAndView modelAndView) {

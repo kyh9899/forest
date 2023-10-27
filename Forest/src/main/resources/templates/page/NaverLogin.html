@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block th:with="pageName='login'"></th:block>
+
+<meta th:name="_csrf" th:content="${_csrf.token}"/>
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+<head>
+    <title>Naver Login</title>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+</head>
+<body>
+    <form method="post" th:action="@{/login}" id="login_form" style="display: none">
+        <input type="text" id="username" name="username">
+        <input type="password" id="password" name="password">
+    </form>
+
+    <script>
+    var naverLogin = new naver.LoginWithNaverId(
+            {
+                clientId: "K2gHG8kXjWTrt7Ss5tJf",
+                callbackUrl: "http://localhost:8099",
+                isPopup: false,
+            }
+        );
+        naverLogin.init();
+
+        window.addEventListener('load', function () {
+            naverLogin.getLoginStatus(function (status) {
+                let header = $('meta[name="_csrf_header"]').attr('content');
+                let token = $('meta[name="_csrf"]').attr('content');
+                
+                console.log(header);
+                console.log(token);
+
+                if (status) {
+                    console.log(naverLogin.user);
+                    let id = naverLogin.user.getId();
+                    let name = naverLogin.user.getName();
+                    let nickname = naverLogin.user.getNickName();
+                    let image = naverLogin.user.getProfileImage();
+                    let phone = naverLogin.user.getMobile();
+
+                    console.log(id);
+                    console.log(name);
+                    console.log(nickname);
+                    console.log(image);
+                    console.log(phone);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/naverLogin",
+                        data: JSON.stringify({
+                            id: id,
+                            name: name,
+                            phone: phone
+                        }),
+                        contentType: 'application/json;charset=UTF-8',
+                        beforeSend: (xhr) => {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        success: function(data) {
+                            $('#username').val(id);
+                            $('#password').val(id);
+                            $('#login_form').submit();
+                        },
+                        error: function(result) {
+                            console.log(result)
+                        }
+                    })
+
+                } else {
+                    console.log("callback 처리에 실패하였습니다.");
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

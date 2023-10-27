@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -159,6 +160,83 @@ return modelAndView;
 	    return modelAndView;
 	}
 	
+	 // 네이버
+    @PostMapping("/naverLogin")
+    public ResponseEntity<Map<String, Object>> naverLogin(@RequestBody Map<String, Object> requestMap) {
+        int result = 0;
+        Map<String, Object> map = new HashMap<>();
+
+        log.info("네이버 로그인 요청");
+
+        Member user = new Member();
+
+
+        String id = requestMap.get("id").toString();
+
+        user.setId(id);
+        user.setEmail(id);
+
+        boolean isDuplicateId = memberService.isDuplicateId(user.getId());
+
+        if (isDuplicateId) {
+            user = memberService.findMemberById(user.getId());
+            result = 1;
+            
+        } else {
+            user.setPassword(requestMap.get("id").toString());
+            user.setName(requestMap.get("name").toString());
+            user.setPhone(requestMap.get("phone").toString());
+
+            try{
+            	memberService.save(user);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        map.put("resultCode", result);
+        return ResponseEntity.ok(map);
+    }
+    
+    // 카카오
+    @PostMapping("/kakaoLogin")
+    ResponseEntity<Map<String, Object>> kakaoLogin(@RequestBody Map<String, Object> requestMap){
+        int result = 0;
+        Map<String, Object> map = new HashMap<>();
+
+        log.info("카카오 로그인 요청");
+
+        Member user = new Member();
+
+
+        String id = requestMap.get("id").toString();
+
+        user.setId(id);
+        user.setEmail(id);
+
+        boolean isEmailDuplicate = memberService.isDuplicateId(user.getId());
+
+        if(isEmailDuplicate){
+            user = memberService.findMemberById(user.getId());
+            result = 1;
+
+        } else {
+            user.setPassword(requestMap.get("id").toString());
+            user.setName("카카오");
+            user.setPhone("KAKAO");
+
+            try{
+            	memberService.save(user);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        map.put("resultCode", result);
+        return ResponseEntity.ok(map);
+    }
+
 }
 
 

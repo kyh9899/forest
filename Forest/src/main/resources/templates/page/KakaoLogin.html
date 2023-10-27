@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<th:block th:with="pageName='login'"></th:block>
+
+<meta th:name="_csrf" th:content="${_csrf.token}"/>
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kakao Login</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js" integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <form method="post" th:action="@{/login}" id="login_form" style="display: none">
+        <security:csrfInput/>
+        <input type="text" id="username" name="username">
+        <input type="password" id="password" name="password">
+    </form>
+
+<script>
+    window.Kakao.init('4e925920cbbb6f6ba6411db762156d66');
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(window.location.href);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    window.onload = () => {
+        let header = $('meta[name="_csrf_header"]').attr('content');
+        let token = $('meta[name="_csrf"]').attr('content');
+
+        console.log(header, token)
+
+        $.ajax({
+            type: "POST",
+            url: "https://kauth.kakao.com/oauth/token",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+                "grant_type": "authorization_code",
+                "client_id": '4e925920cbbb6f6ba6411db762156d66',
+                "redirect_uri": 'http://localhost:8099/kakaoLogin',
+                "code": getParameterByName('code')
+            },
+            success: function (data) {
+                // console.log("액세스 토큰:", data.access_token);
+                Kakao.Auth.setAccessToken(data.access_token);
+
+                Kakao.API.request({
+                    url: '/v2/user/me',
+                })
+                .then(function(response) {
+                    console.log(response)
+                    $.ajax({
+                        type: "POST",
+                        url: "/kakaoLogin",
+                        data:  JSON.stringify({
+                            id: response.id,
+                            nickname: response.properties.nickname,
+                            image: response.properties.thumbnail_image,
+                        }),
+                        contentType: 'application/json;charset=UTF-8',
+                        beforeSend: (xhr) => {
+                            xhr.setRequestHeader(header, token);
+                        },
+                        success: function (data) {
+                            console.log(data.resultCode)
+                            $('#username').val(response.id);
+                            $('#password').val(response.id);
+                            $('#login_form').submit();
+                        },
+                        error: function (error) {
+                            console.error("오류3:", error);
+                        }
+                    });
+                })
+                .catch(function(error) {
+                    console.log("오류2:", error);
+                });
+            },
+            error: function (error) {
+                console.error("오류1:", error);
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
